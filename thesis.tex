@@ -1,0 +1,120 @@
+% Document template suitable for use as a LaTeX master-file 
+% for thesis works in University of Turku Department of Computing
+%
+% Technical usage guide: https://tech.utugit.fi/soft/thesis/doc/doc/overview/
+% 
+
+\documentclass[language=finnish,version=final,mainfont=none,sharelatex=false]{utuftthesis}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+\usepackage{float}
+\usepackage[caption=false]{subfig}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\definecolor{codebg}{rgb}{0.9,0.9,0.9} % Define a light gray background color
+\definecolor{bordercolor}{rgb}{0.7,0.7,0.7} % Define a slightly darker border color
+
+\lstset{
+  backgroundcolor=\color{codebg}, % Set the background color
+  basicstyle=\ttfamily, % Set the font style
+  frame=single, % Add a frame around the code block
+  rulecolor=\color{bordercolor}, % Set the border color
+  language=R, % Set the language for syntax highlighting
+}
+
+% Define the algorithm environment
+%\makeatletter
+\providecommand\textquotedblplain{%
+  \bgroup\addfontfeatures{Mapping=}\char34\egroup}
+\providecommand{\tabularnewline}{\\}
+\floatstyle{ruled}
+\newfloat{algorithm}{tbp}{loa}
+\providecommand{\algorithmname}{Algoritmi}
+\floatname{algorithm}{\protect\algorithmname}
+%\makeatother
+
+\addbibresource{Bibliografia.bib}
+
+\begin{document}
+
+\pubyear{2024}
+\pubmonth{12}
+\pubtype{tkk}
+\title{Figuring out the population attributable risk (PAR) with a bayesian approach; single and multivariatete analysis on cross-sectional study data.}
+\author{Peppi-Lotta Saari}
+
+\maketitle
+\input{content/1_abstract.tex}
+
+% mandatory
+\tableofcontents
+
+% change the name if the default doesn't sound right
+\renewcommand{\algorithmname}{\listingscaption}
+
+% The thesis starts here.
+\input{content/2_introduction.tex}
+\input{content/3_consepts.tex}
+\input{content/4_bayesian_model.tex}
+\input{content/5_R_code.tex}
+\input{content/6_expansion_of_model.tex}
+\input{content/7_evaluation_of_model.tex}
+\input{content/8_comparing_the_model.tex}
+\input{content/9_conclusion.tex}
+
+% The thesis main content ends here.
+
+\printbibliography
+
+\begin{comment}
+Important! Create the appendix chapters with command \textbackslash appchapter\{some
+name\} instead of \textbackslash chapter\{some name\} for the automagic
+page counting to work!
+\end{comment}
+
+
+\appchapter{Liitedokumentti}
+
+Tähän tulee liitteeksi dokumentaatio R koodista, joka on julkaistu käyttöön.
+
+Liitteen ohjelmakoodi \ref{alg:Tyyppiluokka-Monad} kuvaa matemaattisen
+monadirakenteen pohjalta rakentuvan Haskellin tyyppiluokan. Tyyppiluokan
+voi nähdä eräänlaisena abstraktina ohjelmointirajapintana (API\nomenclature[API]{API}{Application Programming Interface}),
+joka muodostaa ohjelmoijalle abstraktin ohjelmointikielen käyttöliittymän
+(UI\nomenclature[UI]{UI}{User Interface}).
+
+\begin{algorithm}[tbh]
+\begin{minted}{haskell}
+class Monad m where
+    ( >>= )         :: m a -> (a -> m b) -> m b
+    return          :: a                 -> m a
+
+    fail            :: String            -> m a
+    (>>)            :: m a -> m b        -> m b
+    m >> k          =  m >>= \_ -> k       -- default
+
+instance Monad IO where  ...               -- omitted
+\end{minted}
+
+\caption{Tyyppiluokka 'Monad'.\label{alg:Tyyppiluokka-Monad}}
+\end{algorithm}
+
+\newpage{}
+
+Ensimmäisen liitteen toinen sivu. Ohjelmalistaus \ref{alg:Monadin-kayttoa}
+demonstroi vielä monadin käyttöä.
+
+\begin{algorithm}[tbh]
+\begin{minted}{haskell}
+main =
+return "Your name:" >>=
+putStr >>=
+\_ -> getLine >>=
+\n -> putStrLn ("Hey " ++ n)
+\end{minted}
+
+\caption{Monadin käyttöä.\label{alg:Monadin-kayttoa}}
+\end{algorithm}
+
+\end{document}

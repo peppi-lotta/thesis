@@ -1,0 +1,95 @@
+\chapter{Consepts} \label{sec:Consepts}
+
+This chapter will provide undestanding of the Bayesian approach as a whole statistical orientation. This chapter will lead the reader trough Bayes' theorem to Baysian inference and data-alytics. Calculating PAR or population attributable risk is the main focus of the Pirikahu\&al. paper. The meaning of PAR and the definition Pirikahu has chosen for it will be also explored.  
+
+\section{Bayes' theorem}\label{BayesianTheorem}
+\begin{equation}
+P(A|B) = \frac{P(B|A)P(A)}{P(B)}
+\end{equation}
+where
+\begin{itemize}
+    \item $P(A|B)$ is the conditional propability\cite{Gut2005ProbabilityAG} or posterior distribution.\cite{Mcelreath2015StatisticalRA} $P(A|B)$ is the propability that A happens given that B has happened. If A and B are independent events then $P(A|B) = P(A)$. \cite{Gut2005ProbabilityAG}
+    \item $P(B|A)$ is the likelihood\cite{Gut2005ProbabilityAG}\cite{Mcelreath2015StatisticalRA}
+    \item $P(A)$ is the prior propability\cite{Gut2005ProbabilityAG} or prior distribution.\cite{Mcelreath2015StatisticalRA}
+    \item $P(B)$ is the set of unobserved data. 
+\end{itemize}
+
+A person using this formula can just place values that they have acquired through frequentist approaches and get a conditional propability thus using the Bayes' theorem alone is not enough to make Bayesian inteference. Bayesian inteference is a broader philosophical and statistical approach to statistical inference.\cite{Mcelreath2015StatisticalRA} In the bayesian approach the values of the posterior, prior and likelihood are no set but random values of a distribution.\cite{Gut2005ProbabilityAG} This allows us to make inference even when the exact values are not known and when data is limited.
+
+\section{Bayesian Inference}\label{BayesianInference}
+Inference means summary or characterization\cite{Robert2007TheBC}. Statistical inference's goal is to make predictions about an unobserved set of data y based on already observed set of data x.\cite{Lindley1990The1W}\cite{Gel2014BayesianDA} The Baesian approach to describing this connection is trough probability that y happens given x. If $x = \{x_1, x_2, ..., x_n \}$ and $y = x_{n + 1}$ then:
+\begin{equation}
+P(y|x) = P(x_{n + 1}|\{x_1, x_2, ..., x_n \})
+\end{equation}
+
+When the amount of observation $x_i$ starts to grow it becomes increasingly more dificult to calculate the effect of each observation on y. The formula can be simplified to $P(y|\theta)$ where $\theta$ is a distribution where $x_i$ are independent and identically distributed i.e. iid. This simplifies the problem because we can assume $x_i$ depends only on $\theta$ and not on other $x_j$.\cite{Lindley1990The1W} This way of expressing uncertainty via a distribution, leans on the consept on exchangeability. Exchangeability is a basic consept of statistical analysis. \cite{Gel2014BayesianDA}  There is no operational difference between $\theta$ which describes belief and $P(x|\theta)$ which is a mesurable quantity. They both describe unceratainty. $P(x|\theta)$ is an updated version of the prior. The Bayes' theorem becomes: 
+\begin{equation}
+P(x|\theta) = \frac{P(\theta|x)P(\theta)}{P(x)}
+\end{equation}
+\cite{Pawitan2002InAL}
+
+\subsection{Prior}\label{Prior}
+Prior distribution is the knowledge we have of the subject matter before we take into account the data.\cite{Box1973BayesianII} Prior provides the plausibility for all parameters before the data is taken into account. \cite{Mcelreath2015StatisticalRA}\cite{Robert2007TheBC} Prior distribution is the best way to summarize information and lack of it.\cite{Robert2007TheBC} 
+
+$\theta$ can be chosen based on some previous inference obtained by Bayesian approach. Even if there is no prior distribution available a prior has to be chosen and this should not be completely arbitrary. Almost always there a some domain knowledge available that will help choose the most suitable prior.\cite{Mcelreath2015StatisticalRA} Choosing a prior is still often at least partly arbitrary.\cite{Robert2007TheBC} Whether the prior is a posterior distribution or a distribution chosen by some other means, it doesn't make a difference qualitatively. Prior distribution is a distribution that describes prior beliefs of the person doing the inference.\cite{Lindley1990The1W} The prior can have a great effect on the posterior. Bad priors can lead to misleading posteriors and bad inference.\cite{Mcelreath2015StatisticalRA} Priors can have a negligible, moderate or highly noticeable effect on the posterior.\cite{Robert2007TheBC}
+
+Different types of priors:
+\begin{itemize}
+    \item Maximum entropy prior
+    \item Parametric approximations
+    \item Empirical
+    \item Hierarchical
+    \item Conjugate priors
+    \item Laplace’s prior
+    \item Invariant priors
+    \item The Jeffrey's prior
+    \item Reference priors
+    \item Matching priors
+\end{itemize}\cite{Robert2007TheBC}
+
+In my R implementation of the approach specified in the Pirikahu paper, the prior can be specified trough a parameter when the method is called. In the evaluation phase in chapter \ref{sec:Evaluation} I will be try out the different priors and see how they perform with a large amount of data and and when the dataset is small.
+
+Prior distribution is not the only distribution that affects the posterior. Another factor in calculating the  posterior is the likelihood.
+
+\subsection{Likelihood}\label{Likelihood}
+Likelihood or likelihood function has meaning outside of the Bayesian approach. Here I will give a description of likelihood in the context of Bayesian inference. Every time when likelihood is mentioned description is the version of likelihood that is meant. 
+
+Likelihood function contains the information that $x_i$ brings to the inference. \cite{Robert2007TheBC} Likelihood is derived by forming all data sequences and removing the ones that are inconsistent with the observed data. It usually is the distribution function assigned to a variable or distribution of variables. \cite{Mcelreath2015StatisticalRA} The information provided by $X_1$ about $\theta$ is contained in the distribution $l(\theta|x_1)$. When a new observation $x_2$ is made it needs to comply with equation:
+\begin{equation}\label{LikelihoodPrinsiple}
+l_1(\theta|x_1) = cl_2(\theta|x_2)
+\end{equation}
+\cite{Robert2007TheBC}. This is called the likelihood principle and it is valid when the inference is about the same $\theta$ and $\theta$ includes every unknown factor of the model. \cite{Robert2007TheBC}. When the sample size increases the meaning of the likelihood grows with it. \cite{Mcelreath2015StatisticalRA} The prior is modified by the data x trough the likelihood function. It represent the information about $\theta$ coming from the data.The data affects the posterior trough the likelihood so the Bayes rule can be simplified to $posterior\ distribution \propto likelihood * prior\ distribution$ where: 
+\begin{equation}\label{BayesRuleWithConstants}
+P(\theta|x) \propto cP(x|\theta)P(\theta)
+\end{equation} In \ref{LikelihoodPrinsiple} $c$ is a constant. Multiplication by a constant leaves the likelihood function unchanged. Only the relative value of the likelihood matters and multiplying by a constant will have no affect on the posterior $\theta$. By normalizing the right side of \ref{BayesRuleWithConstants} the constant will be canceled out.\cite{Box1973BayesianII}
+ 
+\subsection{Posterior}\label{Posterior}
+The simplest definition for a posterior is the probability p conditional on the data.\cite{Mcelreath2015StatisticalRA} This is what we know of the distribution $\theta$ given the knowledge of the data.\cite{Box1973BayesianII}
+
+\subsection{Sampling}\label{Sampling}
+\subsubsection{Monte-Carlo-Marcov}\label{MonteCarloMarcov}
+\subsection{Bayesian Data-analysis}\label{BayesianDataAnalysis}
+Ideally Bayesian data-analysis is a three step process: 
+\begin{itemize}
+    \item Full probability model: A model that is consistent with underlying scientific knowledge of the problem and, observed and unobserved data. 
+    \item Conditioning on observed data: Calculating and interpreting the posterior distribution.
+    \item Evaluation: fit of the model and the implications of the posterior distribution.
+\end{itemize}\cite{Gel2014BayesianDA}
+
+\subsection{Confidence intervals}
+
+\section{PAR, Population attributable risk}\label{PAR}
+Population attributable risk measures the impact of complete removal of a risk factor in a population. 
+\begin{equation}
+PAR = P(D+) - P(D+| E+)
+\end{equation}
+, where D is the disease status and E is the exposure status. PAR is a probability distribution that is calculated by removing the probability distribution of disease cases that occur given that an exposure has happened from the probability distribution of all disease occurrences. In conclusion PAR is $P(D+| E-)$. From this way of representing the PAR we can see why the Bayesian approach could give the best result when calculating this value. \cite{Pirikahu2016BayesianMO}
+
+\subsection{Risk}\label{Risk}
+\subsection{Hazard}\label{Hazard}
+
+\section{R language}\label{Rlanguage}
+\subsection{Stan}\label{Stan}
+
+\section{Cross-sectional study}\label{CrossSectionalStudy}
+
