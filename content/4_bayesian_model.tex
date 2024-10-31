@@ -1,7 +1,58 @@
-\chapter{The Bayesin Model for Assessing Population Attributable Risk (PAR)} \label{bayesian-model}
+\chapter{The Bayesin Approach to Confidence Interval Construction for Poulation Attributable Risk (PAR)} \label{bayesian-model}
+In this chapter I will go over the approach proposed in paper \textit{Bayesian methods of confidence interval construction for the population attributable risk from cross-sectional studies} by Pirikahu\&al. 
+\begin{table}[h!]
+\centering
+\caption{2 x 2 Contingency Table For n Samples}
+\label{contingency-table}
+\begin{tabular}{|c|c|c|c|}
+\hline
+Exposed & D+ (has disease) & D- (no disease) & Total \\ \hline
+E+ & a & b & a \+ b \\ \hline
+E- & c & d & c \+ d \\ \hline
+Total & a \+ c & b \+ d & n \\ \hline
+\end{tabular}
+\end{table}
 
-This chapter will give and overview of the \textit{Bayesian methods of confidence interval construction for the population attributable risk from cross-sectional studies} -paper by Sarah Pirikahu, Geoffrey Jones, Martin L. Hazeltona and Cord Heuerb. 
+$n$ denotes the total sample size where $a + b + c + d = n$. From the contingecy table we can see that a cross-sectional study with one exposure variable and one desease variable can be seen as a multinomial distribution with four possible outcomes that are independet from each other. These outcomes can be described with multinomial distribution as follows:
+\begin{equation}
+(a, b, c, d) \sim Multinomial(n, p_{11}, p_{12}, p_{21}, p_{22})
+\end{equation}
+
+\begin{itemize}
+    \item $P(E+) = \frac{a + b}{n}$: The propability of the expososed in a population.
+    \item $P(E-) = \frac{c + d}{n}$: The propability of the expososed in a population.
+    \item $P(D+) = \frac{a + c}{n}$, The propability of having the disease in a population.
+    \item $p_{11} = P(D + \cap E+) = P(D + | E+)P(E+) = P(E + | D+)P(D+) = \frac{a}{n}$: The probability of being exposed and not having the disease.
+    \item $p_{12} = P(D - \cap E+) = P(D - | E+)P(E+) = P(E + | D-)P(D+) = \frac{b}{n}$: The probability of being exposed and not having the disease.
+    \item $p_{21} = P(D + \cap E-) = P(D + | E-)P(E-) = P(E - | D+)P(D+) = \frac{c}{n}$: The probability of not being exposed and having the disease.
+    \item $p_{22} = P(D - \cap E-) = P(D - | E-)P(E-) = P(E - | D-)P(D-) = \frac{d}{n}$: The probability of not being exposed and not having the
+\end{itemize}
+
+The population attributable risk (PAR) is defined as the proportion of the disease in a population that have occured due to exposure. The PAR can be calculated with formula \ref{PARequation}. With Bayes' theorem we can rewrite the formula and by add the values from the list above we get the maximum likehood estimation function for PAR.
 
 \begin{equation}
-E = mc^2
+\begin{split}
+PAR &= P(D+) - P(D+| E-) \\
+    &= P(D+) - \frac{P(E-|D+)P(D+)}{P(E-)} \\
+    &= \frac{a + c}{n} - \frac{\frac{c}{n}}{\frac{c + d}{n}} \\
+    &= \frac{a + c}{n} - \frac{n}{c} \times  \frac{c + d}{n} \\
+    &= \frac{a + c}{n} - \frac{c + d}{c} \\
+    &= \frac{a + c}{a + b + c + d} - \frac{c + d}{c} \\
+\end{split}
 \end{equation}
+
+Prior distribution that estimates all the situations dercribed in the contingency table is: 
+$\theta = (p_{11}, p_{12}, p_{21}, p_{22})$. Observed values or samples are: $x = (a, b, c, d)$. And the likelihood in respect to $p_k$ is denoted by a propability mass function: 
+\begin{equation}
+    f(x|\theta) = \frac{n!}{a!b!c!d!}p_{11}^ap_{12}^bp_{21}^cp_{22}^d
+\end{equation}
+
+Posterior distribution is: $p(a,b,c,d|p_{11}, p_{12},p_{21},p_{22}) = p(\theta|x) \varpropto  f (x|\theta)p(\theta)$. Due to conjugacy relationship posterior can be found analytically to be
+\begin{equation}
+    \theta|x ~ Dirichlet(a \+ 1, b \+ 1, c \+ 1, d \+ 1).
+\end{equation}
+It is computationally much less expencive to represent posteriors analytically than with MCMC simulation. 
+
+Conffidence interval is a frequentist consept but it can be constructed based on the repeated sampling of the posterior even with this approach. 
+
+
