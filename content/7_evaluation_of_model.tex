@@ -1,2 +1,13 @@
 \chapter{Evaluation} \label{sec:Evaluation}
 
+To explore performance we will select known values for parameters p, q, e and n. 
+\begin{itemize}
+    \item $p = P(D + |E+)$
+    \item $q = P(D + |E-)$
+    \item $e = P(E+)$
+    \item $n$
+\end{itemize}
+
+We need to generate 10,000 contingency tables for these chosen variables based on the multinomial model \ref{multinomial}. A confidence interval will be constructed for the PAR with three different methods: delta method, bootstrap and the Bayesian approach proposed by Pirikahu et al. Delta method is the standard approach to variance estimation for PAR. Lehnert-Batar et al. results indicate that bootstrap method outperform the delta method in terms of coverage and interval length. I'm going to compare the performance of these methods with the Bayesian approach.
+
+\section{Comparison of Pirikahu et al.'s Bayesian method with standard frequentist approaches.}

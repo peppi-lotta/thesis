@@ -1,5 +1,7 @@
-\chapter{The Bayesin Approach to Confidence Interval Construction for Poulation Attributable Risk (PAR)} \label{bayesian-model}
+\chapter{The Bayesian Approach to Confidence Interval Construction for Population Attributable Risk (PAR)} \label{bayesian-model}
 In this chapter I will go over the approach proposed in paper \textit{Bayesian methods of confidence interval construction for the population attributable risk from cross-sectional studies} by Pirikahu\&al. 
+
+\section{Mathematical Model} \label{PiriMath}
 \begin{table}[h!]
 \centering
 \caption{2 x 2 Contingency Table For n Samples}
@@ -7,14 +9,14 @@ In this chapter I will go over the approach proposed in paper \textit{Bayesian m
 \begin{tabular}{|c|c|c|c|}
 \hline
 Exposed & D+ (has disease) & D- (no disease) & Total \\ \hline
-E+ & a & b & a \+ b \\ \hline
-E- & c & d & c \+ d \\ \hline
-Total & a \+ c & b \+ d & n \\ \hline
+E+ & a & b & a $+$ b \\ \hline
+E- & c & d & c $+$ d \\ \hline
+Total & a $+$ c & b $+$ d & n \\ \hline
 \end{tabular}
 \end{table}
 
 $n$ denotes the total sample size where $a + b + c + d = n$. From the contingecy table we can see that a cross-sectional study with one exposure variable and one desease variable can be seen as a multinomial distribution with four possible outcomes that are independet from each other. These outcomes can be described with multinomial distribution as follows:
-\begin{equation}
+\begin{equation} \label{multinomial}
 (a, b, c, d) \sim Multinomial(n, p_{11}, p_{12}, p_{21}, p_{22})
 \end{equation}
 
@@ -47,12 +49,16 @@ $\theta = (p_{11}, p_{12}, p_{21}, p_{22})$. Observed values or samples are: $x 
     f(x|\theta) = \frac{n!}{a!b!c!d!}p_{11}^ap_{12}^bp_{21}^cp_{22}^d
 \end{equation}
 
-Posterior distribution is: $p(a,b,c,d|p_{11}, p_{12},p_{21},p_{22}) = p(\theta|x) \varpropto  f (x|\theta)p(\theta)$. Due to conjugacy relationship posterior can be found analytically to be
+Posterior distribution is: $p(a,b,c,d|p_{11}, p_{12},p_{21},p_{22}) = p(\theta|x) \varpropto  f (x|\theta)p(\theta)$. Due to conjugacy relationship, in relation to the prior, posterior can be found analytically. Posterior is:
 \begin{equation}
-    \theta|x ~ Dirichlet(a \+ 1, b \+ 1, c \+ 1, d \+ 1).
+    \theta|x ~ Dirichlet(a + 1, b + 1, c + 1, d + 1).
 \end{equation}
 It is computationally much less expencive to represent posteriors analytically than with MCMC simulation. 
 
-Conffidence interval is a frequentist consept but it can be constructed based on the repeated sampling of the posterior even with this approach. 
+Confidence interval is a frequentist consept but it can be constructed based on the repeated sampling of the posterior even with this Bayesian approach. \cite{Pirikahu2016BayesianMO}
 
-
+\section{Code Implementation} \label{CodeImplementation}
+\begin{lstlisting}[language=R]
+def hello_world():
+    print("Hello, world!")
+\end{lstlisting}

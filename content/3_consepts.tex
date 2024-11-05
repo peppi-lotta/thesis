@@ -44,9 +44,17 @@ P(y|x) = P(x_{n + 1}|\{x_1, x_2, ..., x_n \})
 
 When the amount of observation $x_i$ starts to grow it becomes increasingly more difficult to calculate the effect of each observation on y. The formula can be simplified to $P(y|\theta)$ where $\theta$ is a distribution where $x_i$ are independent and identically distributed i.e. iid. This simplifies the problem because we can assume $x_i$ depends only on $\theta$ and not on other $x_j$.\cite{Lindley1990The1W} This way of expressing uncertainty via a distribution, leans on the concept on exchangeability. Exchangeability is a basic concept of statistical analysis. \cite{Gel2014BayesianDA}  There is no operational difference between $\theta$ which describes belief and $P(x|\theta)$ which is a measurable quantity. They both describe uncertainty. $P(x|\theta)$ is an updated version of the prior. The Bayes' theorem becomes: 
 \begin{equation}
-P(x|\theta) = \frac{P(\theta|x)P(\theta)}{P(x)}
+P(x|\theta) = \frac{P(\theta|x)P(x)}{P(\theta)}
 \end{equation}
 \cite{Pawitan2002InAL}
+
+\subsection{Bayesian Data-analysis}\label{BayesianDataAnalysis}
+Ideally Bayesian data-analysis is a three step process: 
+\begin{itemize}
+    \item Full probability model: A model that is consistent with underlying scientific knowledge of the problem and, observed and unobserved data. 
+    \item Conditioning on observed data: Calculating and interpreting the posterior distribution.
+    \item Evaluation: fit of the model and the implications of the posterior distribution.
+\end{itemize}\cite{Gel2014BayesianDA}
 
 \subsection{Prior}\label{Prior}
 Prior distribution is the knowledge we have of the subject matter before we take into account the data.\cite{Box1973BayesianII} Prior provides the plausibility for all parameters before the data is taken into account. \cite{Mcelreath2015StatisticalRA}\cite{Robert2007TheBC} Prior distribution is the best way to summarize information and lack of it.\cite{Robert2007TheBC} 
@@ -56,8 +64,6 @@ $\theta$ can be chosen based on some previous inference obtained by Bayesian app
 The priors mainly used in this thesis are the conjugate priors. Prior distribution is conjugate to the likelihood if the prior belongs to the same distribution family as the posterior distribution. Prior is chosen so that the parametric form of the prior is the same as the posterior's. This is to make calculating posterior easiest. \cite{SUGIYAMA2016185}
 
 Some other types of priors are: maximum entropy prior, parametric approximations, Laplace’s prior, the Jeffrey's prior, empirical, hierarchical, matching priors, reference priors, and invariant priors. \cite{Robert2007TheBC}
-
-In my R implementation of the approach specified in the Pirikahu paper, the prior can be specified trough a parameter when the method is called. In the evaluation phase in chapter \ref{sec:Evaluation} I will be try out the different priors and see how they perform with a large amount of data and when the dataset is small.
 
 Prior distribution is not the only distribution that affects the posterior. Another factor in calculating the posterior is the likelihood.
 
@@ -79,29 +85,25 @@ P(\theta|x) \propto cP(x|\theta)P(\theta)
 \end{equation}\cite{Box1973BayesianII}
 
 Posterir is often mathematically complex and high-dimentional and direct inference on it is not possible. The number of dimensions is equal to the number of parameters. The posterior function is often an integral that is not solvable by analytical means and the posterior distribution can not be evaluated exactly. Sampling the posterior provides a solution for this.\cite{vandeSchoot2020BayesianSA}
+Some leading methods like ones based on Markov chain Monte Carlo (MCMC) only produce samples of the posterior instead of a mathematical function of the posterior.\cite{Mcelreath2015StatisticalRA}
 
-\subsection{Sampling}\label{Sampling}
-
-\subsubsection{Monte-Carlo-Marcov-Chain}\label{MonteCarloMarcovChain}
-
-\subsection{Bayesian Data-analysis}\label{BayesianDataAnalysis}
-Ideally Bayesian data-analysis is a three step process: 
+\subsection{Posterior Sampling}\label{PosteriorSampling}
+Posterior sampling can be used to summarize and simulate the posterior. Samples are drawn from a "bucket" where values are present in the porportion to their posterior probability. Samples will have the same distribution as the actual posterior. The more samples are drawn the more exact the distribution will be. Sampling is a part of the evaluation phase of Bayesian data-analysis.
+\subsubsection*{Summarize}
+Question is summarization are divided into tree categories: 
 \begin{itemize}
-    \item Full probability model: A model that is consistent with underlying scientific knowledge of the problem and, observed and unobserved data. 
-    \item Conditioning on observed data: Calculating and interpreting the posterior distribution.
-    \item Evaluation: fit of the model and the implications of the posterior distribution.
-\end{itemize}\cite{Gel2014BayesianDA}
-
+    \item Intervals of defined boundaries: questions about the frequency of the parameters in the posterior in chosen intervals.
+    \item Intervals of defined mass: questions about conffidence and credibility intervals. 
+    \item Point estimates: questions about single points in posterior distribution.
+\end{itemize}
+\subsubsection*{Simulate}
+Simulationis are done to check the model and make predictions. Simulation can be done on a prior distribution to understand it better. Sampling from a known distribution will allow testing whether a model is working correctly. Simulation can also be used to predict possible future observations. \cite{Mcelreath2015StatisticalRA}
 \section{PAR, Population attributable risk}\label{PAR}
 Population attributable risk measures the impact of complete removal of a risk factor in a population. 
 \begin{equation} \label{PARequation}
 PAR = P(D+) - P(D+| E-)
 \end{equation}
 , where D is the disease status and E is the exposure status. PAR is a probability distribution that is calculated by removing the probability distribution of disease cases that occur given that an exposure has not happened from the probability distribution of all disease occurrences . \cite{Pirikahu2016BayesianMO}
-
-\section{R language}\label{Rlanguage}
-\subsection{Stan}\label{Stan}
-
 \section{Cross-sectional study}\label{CrossSectionalStudy}
 Cross-sectional study is a snapshot of a population at a certain point in time. Both the exposure and outcome can be observed at the same time. Individuals for observation are chosen from population that is relevant for the study. This study method does not take into account new cases of the desease that develope over a selected period of time. 
 
@@ -113,3 +115,10 @@ Subtypes of cross-sectional study:
 \end{itemize}
 \cite{Wang2020CrossSectionalSS} 
 
+\section{Frequentist approach to confidence interval construction for PAR}\label{FrequentistApproach}
+\subsection{Delta method}\label{DeltaMethod}
+
+\subsection{Bootstrap}\label{Bootstrap}
+
+\section{R language}\label{Rlanguage}
+R is a language and environment for statistical computing and graphics. R is available as Free Software under the terms of the Free Software Foundation's GNU General Public License in source code form. R is a GNU project. R is an environment where statistical techniques are implemented. It can be extended with the usage of packages. \cite{RWebPage} The base R has functions to perform all major statistical tests, plotting, and matrix operations. It is provided as a combination of 14 different core packages: base, compiler, datasets, grDevices, graphics, grid, methods, parallel, splines, stats, stats4, tcltk, tools and utils. Package can be then loaded with the library() command once installed on a machine. R's functionality can be divided into three classes: data interaction, analysis, and result visualization. There are three major repositories for additional R packages: CRAN, Bioconductor and R-Forge. CRAN package, devtools, provides a convenient function to install packages directly from a GitHub repository. \cite{Giorgi2022TheRL}
