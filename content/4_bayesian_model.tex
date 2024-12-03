@@ -53,9 +53,9 @@ Posterior distribution is: $p(a,b,c,d|p_{11}, p_{12},p_{21},p_{22}) = p(\theta|x
 \begin{equation}
     \theta|x ~ Dirichlet(a + 1, b + 1, c + 1, D^+ 1).
 \end{equation}
-It is computationally much less expencive to represent posteriors analytically than with MCMC simulation. 
+It is computationally much less expencive to represent posteriors analytically than with MCMC simulation. \cite{Pirikahu2016BayesianMO}
 
-Confidence interval is a frequentist consept but it can be constructed based on the repeated sampling of the posterior even with this Bayesian approach. \cite{Pirikahu2016BayesianMO}
+Confidence interval is a frequentist consept but throug simulated data we can calculate whther the credibility interval has the frequentist coverage.
 
 \section{Code Implementation} \label{CodeImplementation}
 \begin{lstlisting}[language=R]
