@@ -1,0 +1,53 @@
+```{r}
+if (!require(MCMCpack)) {
+  install.packages("MCMCpack")
+  library(MCMCpack)
+}
+if (!require(dplyr)) {
+  install.packages("dplyr")
+  library(dplyr)
+}
+```
+
+```{r}
+# Load the par_package.R file where all the functions are defined
+source('par_package.R')
+source('bootstrap.R')
+```
+
+```{r}
+# Specify the file path.
+file_path <- "./data.csv"
+
+# Use read.csv() function to read the file
+data <- read.csv(file_path)
+
+# Randomly select 250 rows
+data <- data[sample(nrow(data), 250), ]
+
+# Calculate BMI and add 1 or 0
+data <- data %>%
+  mutate(over_weight = ifelse(weight/((height/100)^2) > 24.99, 1, 0))
+```
+
+```{r}
+# Print contingency table, PAR, and confidence interval
+bayesian_par <- calculate_par_and_ci_single(data, "over_weight", "cardio", 0.95, list(1, 1, 1, 1))
+
+print(bayesian_par$contingency_table)
+cat("PAR: ", bayesian_par$bayesian_par, "\n")
+cat("Confidence Interval: ", bayesian_par$confidence_interval, "\n")
+hist(bayesian_par$par_samples, main = "Histogram of PAR samples", xlab = "PAR", ylab = "Frequency")
+plot(bayesian_par$par_samples, main = "Trace plot of PAR samples")
+```
+
+```{r}
+# Print contingency table, PAR, and confidence interval
+bootstrap_par <- bootstrap(data, "over_weight", "cardio", 0.95)
+
+print(bootstrap_par$contingency_table)
+cat("PAR: ", bootstrap_par$bootstrap_par, "\n")
+cat("Confidence Interval: ", bootstrap_par$confidence_interval, "\n")
+hist(bootstrap_par$par_samples, main = "Histogram of PAR samples", xlab = "PAR", ylab = "Frequency")
+plot(bootstrap_par$par_samples, main = "Trace plot of PAR samples")
+```

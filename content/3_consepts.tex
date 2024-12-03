@@ -34,7 +34,11 @@ Confidence interval measures uncertainty of the estimate. The interval has a upp
 Confidence interval is a frequentist term. Confidence interval is based on repeated sampling theory.\cite{Schoot2014BayesianA} Confidence interval is a range of numbers that is likely to include the unknown population parameter that is being estimated.\cite{Illowsky2013IntroductorySO} This is also known as the regression coefficient, a term that describes the relationship between the predictor variable and outcome.\cite{RegressionCoefficients} For 95\% CI the interval will contain the regression coefficient 95 out of 100 times when repeated.\cite{Schoot2014BayesianA} This is different from having a 95\% probability that the regression coefficient is in the interval. In frequentist statistics parameters aren's assigned propabilities. \cite{FornaconWood2022UnderstandingTD}
 
 \subsection*{Credibility intervals}\label{CredibilityIntervals}
-Credibility interval is the Bayesian equivalent of confidence interval. It is a probability that the true value is contained in the chosen interval. 95\% credibility interval means that there is 95\% probability that the true value is in the interval. The frequentist confidence interval is often missinterpered this way. This is why the credibility interval is more intuitive than the confidence interval.\cite{FornaconWood2022UnderstandingTD}
+Credibility interval is the Bayesian equivalent of confidence interval. It is a probability that the true value is contained in the chosen interval. 95\% credibility interval means that there is 95\% probability that the true value is in the interval. The frequentist confidence interval is often missinterpered this way. This is why the credibility interval is more intuitive than the confidence interval.\cite{FornaconWood2022UnderstandingTD} 
+Tail method is a way of constructing the credibility interval. It sets the lower and uper limits by symmetrically cutting the interval between both tails of a distribution. The limit are $\alpha\ /\ 2$ and $1\ -\ \alpha\ /\ 2$ percentage points of the distribution. If the selected interval is 95\% then $\alpha$ is 0.05. \cite{Shi2009BayesianCI}
+
+\subsection{Bayesian confidence intervals}\label{BayesianConfidenceIntervals}
+Bayesian credible interval is a confidence interval if it demonstraits the frequentist properties of a confidence interval. This can be observed by calculating the overall percentage coverage for simulated data where various fixed parameters are set. \cite{Pirikahu2016BayesianMO} \cite{Shi2009BayesianCI} Coverage percentage will show if the interval is nominal or not. \cite{Pirikahu2016BayesianMO} 
 
 \section{Bayesian Inference}\label{BayesianInference}
 Inference means summary or characterization\cite{Robert2007TheBC}. It is the process of finding an appropriate model and fitting it to a set of data.\cite{Gel2014BayesianDA} Statistical inference's goal is to make predictions about an unobserved set of data y based on already observed set of data x.\cite{Lindley1990The1W}\cite{Gel2014BayesianDA} The Bayesian approach to describing this connection is trough probability that y happens given x. If $x = \{x_1, x_2, ..., x_n \}$ and $y = x_{n + 1}$ then:
@@ -101,7 +105,7 @@ Simulationis are done to check the model and make predictions. Simulation can be
 \section{PAR, Population attributable risk}\label{PAR}
 Population attributable risk measures the impact of complete removal of a risk factor in a population. 
 \begin{equation} \label{PARequation}
-PAR = P(D+) - P(D+| E-)
+PAR = P(D^+) - P(D^+| E^-)
 \end{equation}
 , where D is the disease status and E is the exposure status. PAR is a probability distribution that is calculated by removing the probability distribution of disease cases that occur given that an exposure has not happened from the probability distribution of all disease occurrences . \cite{Pirikahu2016BayesianMO}
 \section{Cross-sectional study}\label{CrossSectionalStudy}
@@ -116,9 +120,11 @@ Subtypes of cross-sectional study:
 \cite{Wang2020CrossSectionalSS} 
 
 \section{Frequentist approach to confidence interval construction for PAR}\label{FrequentistApproach}
-\subsection{Delta method}\label{DeltaMethod}
+Delta method is the standard approach to variance estimation for PAR. Bootstrap method outperform the delta method in terms of coverage and interval length. \cite{Pirikahu2016BayesianMO} As the bootstap performs better than delta method I will be comparing the Bayesian approach to the bootstrap method.
 
-\subsection{Bootstrap}\label{Bootstrap}
+\subsection{Bootstrap method}\label{Bootstrap}
+Bootstarp method approximates the distribution of a statistic by repeted sampling. The samples are drawn from a fitted model or from a dataset with replacement AKA placing the sample back to the "sample bucket". Drawing from fitted model is parametric and drawing from dataset with replacement is non-parametric. 
+A contingency table has a cell for each classification. A dataset with one exposure and one outcome can be represented in a 2x2 contingency table with four classifications. The propability of selecting a classification is the same as the estimated value in a parametric model. The parametric and non-parametric bootstraps for a 2x2 contingency table are the same when sample size is the same as the size of the dataset.\cite{Pirikahu2016BayesianMO} 
 
 \section{R language}\label{Rlanguage}
 R is a language and environment for statistical computing and graphics. R is available as Free Software under the terms of the Free Software Foundation's GNU General Public License in source code form. R is a GNU project. R is an environment where statistical techniques are implemented. It can be extended with the usage of packages. \cite{RWebPage} The base R has functions to perform all major statistical tests, plotting, and matrix operations. It is provided as a combination of 14 different core packages: base, compiler, datasets, grDevices, graphics, grid, methods, parallel, splines, stats, stats4, tcltk, tools and utils. Package can be then loaded with the library() command once installed on a machine. R's functionality can be divided into three classes: data interaction, analysis, and result visualization. There are three major repositories for additional R packages: CRAN, Bioconductor and R-Forge. CRAN package, devtools, provides a convenient function to install packages directly from a GitHub repository. \cite{Giorgi2022TheRL}
