@@ -17,7 +17,7 @@ Total & a $+$ c & b $+$ d & n \\ \hline
 
 $n$ denotes the total sample size where $a + b + c + d = n$. From the contingecy table we can see that a cross-sectional study with one exposure variable and one desease variable can be seen as a multinomial distribution with four possible outcomes that are independet from each other. These outcomes can be described with multinomial distribution as follows:
 \begin{equation} \label{multinomial}
-(a, b, c, d) \sim Multinomial(n, p_{11}, p_{12}, p_{21}, p_{22})
+(a, b, c, d) \sim Multinomial(n, p_{11}, p_{10}, p_{01}, p_{00})
 \end{equation}
 
 \begin{itemize}
@@ -25,9 +25,9 @@ $n$ denotes the total sample size where $a + b + c + d = n$. From the contingecy
     \item $P(E^-) = \frac{c + d}{n}$: The propability of the expososed in a population.
     \item $P(D^+) = \frac{a + c}{n}$, The propability of having the disease in a population.
     \item $p_{11} = P(D^+ \cap\ E^+) = P(D^+ | E^+)P(E^+) = P(E^+ | D^+)P(D^+) = \frac{a}{n}$: The probability of being exposed and having the disease.
-    \item $p_{12} = P(D^- \cap\ E^+) = P(D^- | E^+)P(E^+) = P(E^+ | D^-)P(D^+) = \frac{b}{n}$: The probability of being exposed and not having the disease.
-    \item $p_{21} = P(D^+ \cap\ E^-) = P(D^+ | E^-)P(E^-) = P(E^- | D^+)P(D^+) = \frac{c}{n}$: The probability of not being exposed and having the disease.
-    \item $p_{22} = P(D^- \cap\ E^-) = P(D^- | E^-)P(E^-) = P(E^- | D^-)P(D^-) = \frac{d}{n}$: The probability of not being exposed and not having the desease.
+    \item $p_{10} = P(D^- \cap\ E^+) = P(D^- | E^+)P(E^+) = P(E^+ | D^-)P(D^+) = \frac{b}{n}$: The probability of being exposed and not having the disease.
+    \item $p_{01} = P(D^+ \cap\ E^-) = P(D^+ | E^-)P(E^-) = P(E^- | D^+)P(D^+) = \frac{c}{n}$: The probability of not being exposed and having the disease.
+    \item $p_{00} = P(D^- \cap\ E^-) = P(D^- | E^-)P(E^-) = P(E^- | D^-)P(D^-) = \frac{d}{n}$: The probability of not being exposed and not having the desease.
 \end{itemize}
 
 The population attributable risk (PAR) is defined as the proportion of the disease in a population that have occured due to exposure. The PAR can be calculated with formula \ref{PARequation}. With Bayes' theorem we can rewrite the formula and by add the values from the list above we get the maximum likehood estimation function for PAR.
@@ -44,12 +44,12 @@ PAR &= P(D^+) - P(D^+| E^-) \\
 \end{equation}
 
 Prior distribution that estimates all the situations dercribed in the contingency table is: 
-$\theta = (p_{11}, p_{12}, p_{21}, p_{22})$. Observed values or samples are: $x = (a, b, c, d)$. And the likelihood in respect to $p_k$ is denoted by a propability mass function: 
+$\theta = (p_{11}, p_{10}, p_{01}, p_{00})$. Observed values or samples are: $x = (a, b, c, d)$. And the likelihood in respect to $p_k$ is denoted by a propability mass function: 
 \begin{equation}
-    f(x|\theta) = \frac{n!}{a!b!c!d!}p_{11}^ap_{12}^bp_{21}^cp_{22}^d
+    f(x|\theta) = \frac{n!}{a!b!c!d!}p_{11}^ap_{10}^bp_{01}^cp_{00}^d
 \end{equation}
 
-Posterior distribution is: $p(a,b,c,d|p_{11}, p_{12},p_{21},p_{22}) = p(\theta|x) \varpropto  f (x|\theta)p(\theta)$. Due to conjugacy relationship, in relation to the prior, posterior can be found analytically. Posterior is:
+Posterior distribution is: $p(a,b,c,d|p_{11}, p_{10},p_{01},p_{00}) = p(\theta|x) \varpropto  f (x|\theta)p(\theta)$. Due to conjugacy relationship, in relation to the prior, posterior can be found analytically. Posterior is:
 \begin{equation}
     \theta|x ~ Dirichlet(a + 1, b + 1, c + 1, D^+ 1).
 \end{equation}

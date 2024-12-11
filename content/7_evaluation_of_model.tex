@@ -2,31 +2,49 @@
 
 To explore performance we will select known values for parameters p, q, e and n. 
 \begin{itemize}
-    \item $p = P(D^+ |E^+)$
-    \item $q = P(D^+ |E^-)$
+    \item $p = P(D^+ |E^+) = \frac{P(D^+ \cap\ E^+)}{P(E^+)}$ 
+    \item $q = P(D^+ |E^-) = \frac{P(D^+ \cap\ E^-)}{P(E^-)}$
     \item $e = P(E^+)$
     \item $n$
 \end{itemize}
 
-We need to generate 10,000 contingency tables for these chosen variables based on the multinomial model \ref{multinomial}. A confidence interval will be constructed for the PAR with two different methods; bootstrap and the Bayesian approach proposed by Pirikahu et al.
+Because exposure ether has happened or not we can deduce that $P(E^-) = 1 - P(E^+) = 1 - e.$ And because a person can ether have the disease or not we can deduce that $P(D^- |E^-) = 1 - P(D^+ |E^-) = 1 - q.$ and $P(D^+ |E^+) = 1 - P(D^- |E^+) = 1 - p$. We can deconstruct and place values p, q, e and n to get 2 way tables values a, b, c and, d.
+ 
+\begin{itemize}
+    \item $a = p_{11} \times n = P(D^+ \cap\ E^+) \times n = P(D^+ |\ E^+) \times P(E+) = p \times e \times n$
+    \item $b = p_{10} \times n = P(D^- \cap\ E^+) \times n = P(D^- |\ E^+) \times P(E+) = (1 - p) \times e \times n$
+    \item $c = p_{01} \times n = P(D^+ \cap\ E^-) \times n = P(D^+ |\ E^-) \times P(E-) = q \times (1 - e) \times n$
+    \item $d = p_{00} \times n = P(D^- \cap\ E^+) \times n = P(D^- |\ E^-) \times P(E-) = (1 - q) \times (1 - e) \times n$
+\end{itemize}
 
-Parameter values for the simulation are:
+We will also need to know $P(D^+)$ that is related to the chosen constans.
+\begin{equation}
+    \begin{split}
+    P(D^+) &= P(D^+ \cap\ E^+) + P(D^+ \cap\ E^-) \\
+           &= P(D^+ | E^+)P(E^+) + P(D^+ | E^-)P(E^-)  \\
+           &= p \times e + q \times (1 - e) \\
+    \end{split}
+\end{equation}
+
+We need to generate 10,000 contingency tables for these chosen variables based on the multinomial model \ref{multinomial}. A confidence interval will be constructed for the PAR with two different methods; bootstrap and the Bayesian approach proposed by Pirikahu et al. Parameter values for the simulation are:
 \begin{table}[h!]
     \centering
     \caption{Parameters for the simulation}
     \label{sample-parameters}
-    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
     \hline
-    $p$ & 0.01 & 0.05 & 0.1 & 0.2 & 0.3 & 0.35 & 0.4 & 0.45 & 0.5 \\ \hline
-    $q$ & 0.001 & 0.05 & 0.1 & 0.2 & 0.3 & 0.35 & 0.4 & 0.45 & 0.5 \\ \hline
-    $e$ & 0.1 & 0.2 & 0.3 & 0.4 & 0.5 & 0.6 & 0.7 & 0.8 & 0.9 \\ \hline
+    $p$ & 0.001 & 0.01  & 0.05 & 0.1  & 0.2  & 0.3  & 0.35 & 0.4  & 0.45  & 0.5   \\ \hline
+    $q$ & 0.001 & 0.01  & 0.05 & 0.1  & 0.2  & 0.3  & 0.35 & 0.4  & 0.45  & 0.5   \\ \hline
+    $e$ & 0.01  & 0.1   & 0.2  & 0.3  & 0.4  & 0.5  & 0.6  & 0.7  & 0.8   & 0.9   \\ \hline
+    $n$ & 16    & 32    & 64   & 128  & 256  & 512  & 1024 & 4096 & 16384 & 65536 \\ \hline
     \end{tabular}
-    \end{table}
+\end{table}
 
+\subsection{Code implementation}
 \section{Comparison of Pirikahu et al.'s Bayesian method with standard frequentist approaches.}
 
-\subsection{Small datasets}
+\subsection{Efect of Dataset Size}
 
-\subsection{Priors}
+\subsection{Efect of Prior}
 The tail-based Bayesian confidence intervals at Jeffreys prior performs
 best in terms of mean coverage probability. \cite{Shi2009BayesianCI} 
