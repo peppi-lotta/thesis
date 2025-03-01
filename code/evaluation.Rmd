@@ -1,0 +1,193 @@
+# Evaluation
+
+## Source the necessary packages and functions
+
+```{r}
+install.packages("MCMCpack")
+install.packages("dplyr")
+install.packages("data.table")
+install.packages("future")
+install.packages("future.apply")
+install.packages("furrr")
+install.packages("compiler")
+```
+
+
+```{r}
+library(MCMCpack)
+library(dplyr)
+library(data.table)
+library(future)
+library(future.apply)
+library(furrr)
+library(compiler)
+```
+
+```{r}
+devtools::install_github("peppi-lotta/par")
+library(par)
+compile_all()
+```
+
+## Define the helper functions
+
+```{r}
+#' Get the values of a, b, c, and d for a given set of probabilities and N
+#' 
+#' @param p The probability of disease (D^+) given exposure (E^+)
+#' p = P(D^+ |E^+)
+#' @param q The probability of disease (D^+) given there is no exposure (E^-)
+#' q = P(D^+ |E^-)
+#' @param e The probability of exposure in total (E^+)
+#' e = P(E^+)
+#' @param n The number of observations
+#' n = n
+#' @return A list of values for a, b, c, and d
+#' where:
+#' a = p * e * n. The count of rows where both exposure and outcome are 1. 
+#' b = ( 1 - p ) * e * n. The count of rows where exposure is 1 and outcome is 0.
+#' c = q * ( 1 - e ) * n. The count of rows where exposure is 0 and outcome is 1.
+#' d = ( 1 - q ) * ( 1 - e ) * n. The count of rows where both exposure and outcome are 0.
+get_probabilities_2x2_table <- function( p, q, e ) {
+  p_11 <- p * e
+  p_10 <- ( 1 - p ) * e
+  p_01 <- q * ( 1 - e )
+  p_00 <- ( 1 - q ) * ( 1 - e )
+
+  return(list(p_11 = p_11, p_10 = p_10, p_01 = p_01, p_00 = p_00))
+}
+```
+
+## Calculate the coverage percentage
+
+```{r}
+# Set the interval and prior values
+interval <- 0.95
+prior <- c(1, 1, 1, 1)
+
+# Create a data frame with all combinations of the values
+combinations <- expand.grid(
+  p = c(0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99),
+  q = c(0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99),
+  e = c(0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99),
+  n = c(16, 32, 64, 128, 256, 1024)
+)
+combinations <- as.data.table(combinations)
+total_combinations_count <- nrow(combinations)
+# Initialize columns with NA values
+combinations[, c(
+    "p_11",
+    "p_10",
+    "p_01",
+    "p_00",
+    "actual_par",
+    "bayes_ci_mean_length",
+    "bayes_ci_coverage"
+    ) := NA_real_
+]
+
+# Vectorized calculation of probabilities and actual_par
+probabilities <- combinations[, get_probabilities_2x2_table(p, q, e), by = 1:total_combinations_count]
+combinations[, actual_par := p * e + q * (1 - e) - q]
+
+# Combine results into a data table
+dt <- data.table(
+  p = combinations$p,
+  q = combinations$q,
+  e = combinations$e,
+  n = combinations$n,
+  p_11 = probabilities$p_11,
+  p_10 = probabilities$p_10,
+  p_01 = probabilities$p_01,
+  p_00 = probabilities$p_00,
+  actual_par = combinations$actual_par,
+  interval = interval,
+  prior = paste(prior, collapse = ",")
+)
+
+# Write the data table to a CSV file
+write.csv(dt, "combinations.csv")
+```
+
+```{r}
+# Set the plan for parallel processing
+plan(multisession)
+
+# Specify the file path.
+file_path <- "./combinations.csv"
+data <- read.csv(file_path)
+start <- 1
+end <- 4
+
+# Initialize columns with NA values
+data$bayes_ci_mean_length = NA_real_
+data$bayes_ci_coverage = NA_real_
+data$boot_ci_mean_length = NA_real_
+data$boot_ci_coverage = NA_real_
+
+# Record the start time
+start_time <- Sys.time()
+print(paste("Program start time:", start_time))
+
+# Optimize main loop using future.apply
+results <- future_map(start:end, function(i) {
+  row <- data[i, ]
+  # Simulate Bayesian CI
+  samples <- rmultinom(1000, row$n, c(row$p_11, row$p_10, row$p_01, row$p_00))
+  
+  bayes_cis <- apply(samples, 2, function(sample) {
+    a <- sample[1]
+    b <- sample[2]
+    c <- sample[3]
+    d <- sample[4]
+    n <- a + b + c + d
+    calculate_bayesian_ci(c(a, b, c, d), interval, prior, 10000)
+  })
+  
+  # Calculate metrics for Bayesian CI
+  bayes_mean_length <- mean(bayes_cis[2, ] - bayes_cis[1, ])
+  bayes_coverage <- mean(bayes_cis[1, ] <= row$actual_par & bayes_cis[2, ] >= row$actual_par)
+
+  # Simulate Bootstrap CI
+  boot_cis <- apply(samples, 2, function(sample) {
+    a <- sample[1]
+    b <- sample[2]
+    c <- sample[3]
+    d <- sample[4]
+    n <- a + b + c + d
+    calculate_bootstrap_ci(c(a, b, c, d), interval, 10000)
+  })
+  
+  # Calculate metrics for Bootstrap CI
+  boot_mean_length <- mean(boot_cis[2, ] - boot_cis[1, ])
+  boot_coverage <- mean(boot_cis[1, ] <= row$actual_par & boot_cis[2, ] >= row$actual_par)
+  
+  # Return the results as a list
+  list(
+    p = row$p,
+    q = row$q,
+    e = row$e,
+    n = row$n,
+    p_11 = row$p_11,
+    p_10 = row$p_10,
+    p_01 = row$p_01,
+    p_00 = row$p_00,
+    actual_par = row$actual_par,
+    bayes_ci_mean_length = bayes_mean_length,
+    bayes_ci_coverage = bayes_coverage,
+    boot_ci_mean_length = boot_mean_length,
+    boot_ci_coverage = boot_coverage
+  )
+}, .options = furrr_options(seed = 123))
+
+# Combine results into a data table
+final_results <- rbindlist(results)
+
+# Record the end time
+end_time <- Sys.time()
+print(paste("Program end time:", end_time))
+
+# Write the final results to a CSV file
+file_name <- paste0("combinations_with_calculations_", start, "_", end, ".csv")
+write.csv(final_results, file_name)
+```

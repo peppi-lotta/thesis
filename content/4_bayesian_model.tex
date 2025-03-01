@@ -1,8 +1,9 @@
-\chapter{The Bayesian Approach to Confidence Interval Construction for Population Attributable Risk (PAR)} \label{bayesian-model}
-In this chapter I will go over the approach proposed in paper \textit{Bayesian methods of confidence interval construction for the population attributable risk from cross-sectional studies} by Pirikahu\&al. 
+\chapter{The Bayesian Approach to Confidence Interval Construction for Population Attributable Risk (PAR)} \label{sec:bayesian-model}
+
+In this chapter, I will examine the approach proposed in the paper titled \textit{Bayesian Methods for Confidence Interval Construction of Population Attributable Risk from Cross-Sectional Studies} by \textit{Pirikahu et al. (2016)}
 
 \section{Mathematical Model} \label{PiriMath}
-\begin{table}[h!]
+\begin{table}[ht]
 \centering
 \caption{2 x 2 Contingency Table For n Samples}
 \label{contingency-table}
@@ -15,50 +16,392 @@ Total & a $+$ c & b $+$ d & n \\ \hline
 \end{tabular}
 \end{table}
 
-$n$ denotes the total sample size where $a + b + c + d = n$. From the contingecy table we can see that a cross-sectional study with one exposure variable and one desease variable can be seen as a multinomial distribution with four possible outcomes that are independet from each other. These outcomes can be described with multinomial distribution as follows:
+Let $n$ denotes the total sample size, where $a + b + c + d = n$. From the contingency table stucture it is evident that a cross-sectional study incorporating one exposure variable and one disease variable can be characterized as a multinomial distribution with four independent possible outcomes. These outcomes can be described using the multinomial distribution as follows:
+
 \begin{equation} \label{multinomial}
 (a, b, c, d) \sim Multinomial(n, p_{11}, p_{10}, p_{01}, p_{00})
 \end{equation}
 
 \begin{itemize}
-    \item $P(E^+) = \frac{a + b}{n}$: The propability of the expososed in a population.
-    \item $P(E^-) = \frac{c + d}{n}$: The propability of the expososed in a population.
-    \item $P(D^+) = \frac{a + c}{n}$, The propability of having the disease in a population.
-    \item $p_{11} = P(D^+ \cap\ E^+) = P(D^+ | E^+)P(E^+) = P(E^+ | D^+)P(D^+) = \frac{a}{n}$: The probability of being exposed and having the disease.
-    \item $p_{10} = P(D^- \cap\ E^+) = P(D^- | E^+)P(E^+) = P(E^+ | D^-)P(D^+) = \frac{b}{n}$: The probability of being exposed and not having the disease.
-    \item $p_{01} = P(D^+ \cap\ E^-) = P(D^+ | E^-)P(E^-) = P(E^- | D^+)P(D^+) = \frac{c}{n}$: The probability of not being exposed and having the disease.
-    \item $p_{00} = P(D^- \cap\ E^-) = P(D^- | E^-)P(E^-) = P(E^- | D^-)P(D^-) = \frac{d}{n}$: The probability of not being exposed and not having the desease.
-\end{itemize}
+    \item $P(E^+) = \frac{a + b}{n}$: The probability of the exposed in a population.
+    \item $P(E^-) = \frac{c + d}{n}$: The probability of the non-exposed in a population.
+    \item $P(D^+) = \frac{a + c}{n}$: The probability of having the disease in a population.
+    \item $p_{11} = P(D^+ \cap E^+) = P(D^+ | E^+)P(E^+) = P(E^+ | D^+)P(D^+) = \frac{a}{n}$: The probability of being exposed and having the disease.
+    \item $p_{10} = P(D^- \cap E^+) = P(D^- | E^+)P(E^+) = P(E^+ | D^-)P(D^-) = \frac{b}{n}$: The probability of being exposed and not having the disease.
+    \item $p_{01} = P(D^+ \cap E^-) = P(D^+ | E^-)P(E^-) = P(E^- | D^+)P(D^+) = \frac{c}{n}$: The probability of not being exposed and having the disease.
+    \item $p_{00} = P(D^- \cap E^-) = P(D^- | E^-)P(E^-) = P(E^- | D^-)P(D^-) = \frac{d}{n}$: The probability of not being exposed and not having the disease.
+\end{itemize}\label{par_contingency_table_explained}
 
-The population attributable risk (PAR) is defined as the proportion of the disease in a population that have occured due to exposure. The PAR can be calculated with formula \ref{PARequation}. With Bayes' theorem we can rewrite the formula and by add the values from the list above we get the maximum likehood estimation function for PAR.
+The population-attributable risk (PAR) refers to the proportion of disease within a population that can be attributed to a specific exposure. The PAR can be calculated using the formula \ref{PARequation}. By applying Bayes' theorem and by incorporating the values listed in \ref{par_contingency_table_explained}, we obtain the maximum likelihood estimation function for PAR.
 
-\begin{equation}
-\begin{split}
+\begin{equation}\label{PARequationProof}
+\begin{aligned}
 PAR &= P(D^+) - P(D^+| E^-) \\
     &= P(D^+) - \frac{P(E^-|D^+)P(D^+)}{P(E^-)} \\
     &= \frac{a + c}{n} - \frac{\frac{c}{n}}{\frac{c + d}{n}} \\
     &= \frac{a + c}{n} - \frac{c}{n} \times  \frac{n}{c + d} \\
     &= \frac{a + c}{n} - \frac{c}{c + d} \\
     &= \frac{a + c}{a + b + c + d} - \frac{c}{c + d} \\
-\end{split}
+\end{aligned}
 \end{equation}
 
-Prior distribution that estimates all the situations dercribed in the contingency table is: 
-$\theta = (p_{11}, p_{10}, p_{01}, p_{00})$. Observed values or samples are: $x = (a, b, c, d)$. And the likelihood in respect to $p_k$ is denoted by a propability mass function: 
+A prior distribution that estimates all the situations described in a contingency table is: $\theta = (p_{11}, p_{10}, p_{01}, p_{00})$
+Observed values or samples are: $x = (a, b, c, d)$. A probability mass function denotes the likelihood in respect to $p_k$ as
+
 \begin{equation}
     f(x|\theta) = \frac{n!}{a!b!c!d!}p_{11}^ap_{10}^bp_{01}^cp_{00}^d
 \end{equation}
 
-Posterior distribution is: $p(a,b,c,d|p_{11}, p_{10},p_{01},p_{00}) = p(\theta|x) \varpropto  f (x|\theta)p(\theta)$. Due to conjugacy relationship, in relation to the prior, posterior can be found analytically. Posterior is:
+The posterior distribution is:
 \begin{equation}
-    \theta|x ~ Dirichlet(a + 1, b + 1, c + 1, D^+ 1).
+    p(a,b,c,d|p_{11}, p_{10},p_{01},p_{00}) = p(\theta|x) \propto  f (x|\theta)p(\theta)
 \end{equation}
-It is computationally much less expencive to represent posteriors analytically than with MCMC simulation. \cite{Pirikahu2016BayesianMO}
 
-Confidence interval is a frequentist consept but throug simulated data we can calculate whther the credibility interval has the frequentist coverage.
+Due to the conjugacy relationship, the posterior can be found analytically in relation to the prior. Posterior is
 
-\section{Code Implementation} \label{CodeImplementation}
-\begin{lstlisting}[language=R]
-def hello_world():
-    print("Hello, world!")
+\begin{equation}
+    \theta|x ~ Dirichlet(a + 1, b + 1, c + 1, d + 1).
+\end{equation}
+
+Representing posteriors analytically is computationally less expensive than using MCMC simulation. The confidence interval is a Frequentist concept; however, we can determine the Frequentist coverage of the credibility interval through simulated data.
+
+\section{R Code} \label{CodeImplementation}
+
+Implementing the model in R is quite straightforward once the underlying mathematical model is grasped. Constructing a confidence interval for a dataset involves four key steps
+\begin{itemize}
+    \item Extracting the contingency table values from data
+    \item Generating new contingency tables by simulation
+    \item Calculating the PAR for each simulated table
+    \item Constructing the confidence interval from the simulated PAR values
+\end{itemize}
+
+\subsection{Extracting the Contingency Table Values from Data}
+\ref{extractABCDcode} method takes a data frame and extracts the values for $a$, $b$, $c$, and $d$, returning them in a single vector. $a$, $b$, $c$, and $d$ are the count for the different categories and align with categories given in \ref{contingency-table}. All the function that I've created for this package, that use these category values, are expecting a vector with $a$, $b$, $c$, and $d$ values in this order. I've provided this helper function so that the user can use this an trust that the values from a data set are extracted and saved to the correct order.
+
+\begin{lstlisting}
+extract_abcd <- function(
+    data,
+    exposure_col,
+    outcome_col) 
+{
+    x_0e0d <- sum(data[[exposure_col]] == 0 
+        & data[[outcome_col]] == 0)
+    x_0e1d <- sum(data[[exposure_col]] == 0 
+        & data[[outcome_col]] == 1)
+    x_1e0d <- sum(data[[exposure_col]] == 1 
+        & data[[outcome_col]] == 0)
+    x_1e1d <- sum(data[[exposure_col]] == 1 
+        & data[[outcome_col]] == 1)
+
+    return(c(
+    x_1e1d = x_1e1d,
+    x_1e0d = x_1e0d,
+    x_0e1d = x_0e1d,
+    x_0e0d = x_0e0d
+    ))
+}
+\end{lstlisting}\label{extractABCDcode}
+
+\subsection{Calculate PAR}
+I've created a function to calculate Population Attributable Risk from contingency table cell values. \ref{calculateParCode} function accepts a vector of values and returns the corresponding PAR value. The vector must consist of the values $a$, $b$, $c$, and $d$ in that precise order.
+
+If these values are obtained using the method $extract_abcd$, the vector will be properly sequenced and can be directly passed to the \ref{calculateParCode} function.
+
+\begin{lstlisting}
+calculate_par <- function(x) {
+    x <- as.numeric(x)
+    a <- x[1]
+    b <- x[2]
+    c <- x[3]
+    d <- x[4]
+    ...
+}
+\end{lstlisting}\label{calculateParCode}
+
+The logic behind calculating par is derived from equation \ref{PARequation}. In cases where the total number of samples $n$ where $n = a + b + c + d$ is small and the exposure rates $a + b$ are low, the function may return zero values for $c$ and $d$. Since zero cannot be a divisor, I have opted to handle this situation by returning a value of 0 if either the sum of $c$ and $d$ is zero.
+
+\begin{lstlisting}
+if (c + d == 0) {
+    return(0)
+}
+par <- (a + c) / (a + b + c + d) - c / (c + d)
 \end{lstlisting}
+
+The function $calculate_par$ will return a single value, that is, the PAR.
+
+\begin{lstlisting}
+calculate_par <- function(x) {
+...
+    return(par)
+}
+\end{lstlisting}
+
+\subsection{Code for Constructing the Confidence Interval}
+
+Similar to the $calculate_par$ function, the $calculate_bayesian_ci$ method requires a vector of values as a parameter, which must be specified by the user. Additionally, this method can accept values for interval coverage, a vector for the prior distribution, and a value for the number of samples; however, these additional parameters are optional and have default settings. The function expects the $x$ and $prior$ vectors to be ordered as $a$, $b$, $c$, and $d$. The default setting for the number of samples is 10000, which is considered sufficiently large according to \textit{Pirikahu et al. (2016)}. The $prior$ defaults to a vector of ones, indicating a non-informative uniform prior. The standard default value for the interval coverage is 0.95, which is commonly used.
+
+\begin{lstlisting}
+calculate_bayesian_ci <- function(
+    x,
+    interval = 0.95,
+    prior = c(1, 1, 1, 1),
+    sample_count = 10000
+) {
+    x <- as.numeric(x)
+    a <- x[1]
+    b <- x[2]
+    c <- x[3]
+    d <- x[4]
+    n <- a + b + c + d
+    prior <- as.numeric(prior)
+    ...
+}
+\end{lstlisting}
+
+\ref{calculateBayesianCIBulk} is the main logic of the code. Samples of contingency tables are generated using the Dirichlet distribution. \ref{calculateBayesianCIBulk} is calling the $rdirichlet$ function from the $MCMCpack$ package to form new contingency tables and saves them to $samples$ variable. $Samples$ contains $sample\_count$ number of tables. With vector operation $apply$ $calculate_par$ is applied to each table and we get "$sample\_count$" of PAR values. The confidence interval is calculated using the $quantile$ function. The function returns a matrix with the lower bound of the confidence interval as the first value and the upper bound as the second value.
+
+\begin{lstlisting}
+calculate_bayesian_ci <- function(
+...
+    samples <- rdirichlet(
+        sample_count,
+        c(a + prior[1],
+        b + prior[2],
+        c + prior[3],
+        d + prior[4],
+        n
+        )
+    )
+    samples <- apply(samples, 2, function(x) x * n)
+    
+    par_samples <- apply(samples, 1, calculate_par)
+    
+    # Calculate the confidence interval
+    confidence_interval <- quantile(
+        par_samples,
+        c(
+        (1 - interval) / 2,
+        1 - (1 - interval) / 2
+        )
+    )
+...
+)
+\end{lstlisting}\label{calculateBayesianCIBulk}
+
+Finally, the function returns a matrix with the lower bound of the confidence interval That are extracted from the quantile function as the first value and the upper bound as the second value.
+
+\begin{lstlisting}
+calculate_bayesian_ci <- function
+...
+    return(matrix(c(
+        confidence_interval[1],
+        confidence_interval[2]
+    )))
+\end{lstlisting}
+
+Despite the fact that multinomial simulations are generally more efficient than MCMC simulations, conducting evaluations can be resource-intensive. When the $compiler$ is loaded, the $compile_all$ function can be called and all functions within the package are converted from human-readable code to machine code, enhancing execution speed. 
+
+The `cmpfun` function from the Byte Code Compiler can be utilized to compile a function into machine code. This function compiles the body of a closure and returns a new closure with the same formal parameters while replacing the original body with the compiled expression. \cite{byteCodeCompiler}
+
+\begin{lstlisting}
+    compile_all <- function() {
+        calculate_bayesian_ci <-
+            cmpfun(calculate_bayesian_ci)
+        calculate_bootstrap_ci <-
+            cmpfun(calculate_bootstrap_ci)
+        calculate_par <-
+            cmpfun(calculate_par)
+        calculate_paf <-
+            cmpfun(calculate_paf)
+        extract_abcd <-
+            cmpfun(extract_abcd)
+    }
+\end{lstlisting}\label{compileCode}
+
+\section{Evaluation of the Model} \label{sec:Evaluation}
+
+We will run simulation based on selected known values for parameters $p$, $q$, $e$ and $n$ to explore performance.
+\begin{itemize}
+    \item $p = P(D^+ |\ E^+)$, the probability of having the disease given exposure.
+    \item $q = P(D^+ |\ E^-)$, the probability of having the disease given no exposure.
+    \item $e = P(E^+)$, the probability of exposure.
+    \item $n$, the total number of samples. 
+\end{itemize} \label{pqeParams}
+
+Because exposure either has happened or not, we can deduce that $P(E^-) = 1 - P(E^+) = 1 - e.$ And because a person can either have the disease or not, we can deduce that $P(D^- |E^-) = 1 - P(D^+ |E^-) = 1 - q.$ and $P(D^+ |E^+) = 1 - P(D^- |E^+) = 1 - p$. We can use this knowledge to form the probabilities for the different categories
+
+\begin{itemize}\label{pqeParams}
+    \item $a = p_{11} \times n = P(D^+ \cap\ E^+) \times n = P(D^+ |\ E^+) \times P(E+) = p \times e \times n$
+    \item $b = p_{10} \times n = P(D^- \cap\ E^+) \times n = P(D^- |\ E^+) \times P(E+) = (1 - p) \times e \times n$
+    \item $c = p_{01} \times n = P(D^+ \cap\ E^-) \times n = P(D^+ |\ E^-) \times P(E-) = q \times (1 - e) \times n$
+    \item $d = p_{00} \times n = P(D^- \cap\ E^+) \times n = P(D^- |\ E^-) \times P(E-) = (1 - q) \times (1 - e) \times n$
+\end{itemize}
+
+Rate of decease occurance is $P(D^+)$ and can be calculated as
+
+\begin{equation}
+    \begin{split}
+    P(D^+) &= P(D^+ \cap\ E^+) + P(D^+ \cap\ E^-) \\
+           &= P(D^+ | E^+)P(E^+) + P(D^+ | E^-)P(E^-)  \\
+           &= p \times e + q \times (1 - e) \\
+    \end{split}
+\end{equation}
+
+We need to generate 10,000 contingency tables that correspond to selected variables $p$, $q$, $e$, and $n$, using the multinomial distrubution \ref{multinomial}. The parameter values for the simulation are as follows
+
+\begin{table}[h!] \label{simulationParams}
+    \centering
+    \caption{Parameters for the simulation}
+    \label{sample-parameters}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    $p$ & 0.001 & 0.01  & 0.05 & 0.1  & 0.2  & 0.3  & 0.35 & 0.4  & 0.45  & 0.5   \\ \hline
+    $q$ & 0.001 & 0.01  & 0.05 & 0.1  & 0.2  & 0.3  & 0.35 & 0.4  & 0.45  & 0.5   \\ \hline
+    $e$ & 0.01  & 0.1   & 0.2  & 0.3  & 0.4  & 0.5  & 0.6  & 0.7  & 0.8   & 0.9   \\ \hline
+    \end{tabular}
+\end{table}
+
+We can expand this evaluation matrix to compare different sample sizes
+
+\begin{table}[h!] \label{sample-count-parameters}
+    \centering
+    \caption{Parameters for the simulation}
+    \label{sample-count-parameters}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    $n$ & 16    & 32    & 64   & 128  & 256  & 512  & 1024 & 4096 & 16384 & 65536 \\ \hline
+    \end{tabular}
+\end{table}
+\subsection{Code for Evaluating the Model}
+
+Table \ref{simulationParams} provides the parameters for $p$, $q$, and $e$. We need to reverse engineer the probabilities for $a$, $b$, $c$, and $d$ based on the selected parameters. Once we have the probabilities, we can generate contingency tables and construct confidence intervals for PAR employing two different methods: the Bayesian approach proposed by \textit{Pirikahu et al. (2016)} and bootstrap. I loop through all the different combinations of parameters and o the following steps for each combination.
+
+\*subsubsection{Calculating Probabilities for $a$, $b$, $c$, and $d$ From $p$, $q$, $e$}
+
+First we start by calculating the probabilities associated with selected $p$, $q$ and $e$. The function $get\_probabilities\_2x2\_table$ computes and returns the probabilities for $a$, $b$, $c$, and $d$ as $p\_11$, $p\_10$, $p\_01$ and $p\_00$. The function returns a list containing these probabilities in order.
+
+\begin{lstlisting}
+    get_probabilities_2x2_table <- function( p, q, e ) {
+        p_11 <- p * e
+        p_10 <- ( 1 - p ) * e
+        p_01 <- q * ( 1 - e )
+        p_00 <- ( 1 - q ) * ( 1 - e )
+      
+        return(list(
+            p_11 = p_11,
+            p_10 = p_10,
+            p_01 = p_01,
+            p_00 = p_00)
+        )
+      }
+\end{lstlisting}
+
+By utilizing the probabilities for categories and total sample size $n$, we can simulate contingency tables that align with the chosen parameters $p$, $q$, $e$ and $n$. For each of these tables, we can compute the confidence interval (CI) using the $calculate\_bayesian\_ci$ function. 
+
+\*subsubsection{Simulating Contingency Tables}
+
+While \textit{Pirikahu et al. (2016)} gives that 10,000 simulations would be ideal. Due to resource constraints I have, I have  reduced the number of simulations to a 1000. Simulated contingency tables are saved to $samples$ variable.
+
+\begin{lstlisting}
+    samples <- rmultinom(
+        1000,
+        row$n, 
+        c(row$p_11, row$p_10, row$p_01, row$p_00)
+    )
+\end{lstlisting}
+
+\*subsubsection{Constructing the Confidence Interval} \label{constructingCI}
+
+The confidence interval is computed for each generated contingency table in $samples$. All of these tables represent the same parameters: $p$, $q$, $e$, and $n$, and share the same PAR. PAR calculated with the Bayesian method to get a set of confidence intervals
+
+\begin{lstlisting}
+    bayes_cis <- apply(samples, 2, function(sample) {
+      a <- sample[1]
+      b <- sample[2]
+      c <- sample[3]
+      d <- sample[4]
+      n <- a + b + c + d
+      calculate_bayesian_ci(
+        c(a, b, c, d),
+        interval,
+        prior,
+        10000
+        )
+    })
+\end{lstlisting}
+
+Bootstrap method is applied to the same set of samples to get a set of confidence intervals
+
+\begin{lstlisting}
+    boot_cis <- apply(samples, 2, function(sample) {
+      a <- sample[1]
+      b <- sample[2]
+      c <- sample[3]
+      d <- sample[4]
+      n <- a + b + c + d
+      calculate_bayesian_ci(
+        c(a, b, c, d),
+        interval,
+        10000
+        )
+    })
+\end{lstlisting}
+
+\*subsubsection{Calculating Metrics}
+The coverage is considered nominal if the actual PAR falls within the lower and upper bounds of the interval in 95\% of the simulations, or at least $1000 * 0.95 = 950$ times. Calculating the actual PAR from $p$, $q$ and $e$ has to be done so that we can calculate coverage percentage. I have given definitions for $p$, $q$, and $e$ in \ref{pqeParams}. Values from \ref{pqeParams} can be placed into \ref{PARequation} to get an equation to calculate PAR from the parameters.
+
+\begin{equation}
+\begin{aligned} \label{actualPAR}
+    PAR &= P(D^+) - P(D^+| E^-)     \\
+        &= p * e + q * (1 - e) - q  \\
+\end{aligned}
+\end{equation}
+
+The second row of equation \ref{actualPAR} can be directly implemented in code. We can calculate the coverage percentage by checking if the actual Par value is with in the upper and lower bounds of the confidence interval. 
+
+\begin{lstlisting}
+    bayes_coverage <- mean(
+        bayes_cis[1, ] <= row$actual_par 
+        & bayes_cis[2, ] >= row$actual_par
+    )
+\end{lstlisting}
+
+The mean length of interval across all simulations is computed along with the coverage percentage.
+
+\begin{lstlisting}
+bayes_mean_length <- mean(
+    bayes_cis[2, ] - bayes_cis[1, ]
+)
+\end{lstlisting}
+
+Coverage percentage and mean interval legth are two metrics that can be used to compare different models. If the coverage percentages of all models meet the nominal criteria, meaning they are equal to or exceed the specified interval value, the model with the narrowest mean length is considered the most effective.
+
+I have calculated coverage precentage and mean interval lenth for both Bayesian and bootstrap methods. I have save the result in a CSV file for further analysis.
+
+\*subsubsection{CSV File Output}
+
+After the steps out lined in previous section. I have generated a CSv file with the following columns
+
+$p$, $q$, $e$, $n$, $p\_11$, $p\_10$, $p\_01$, $p\_00$, $actual\_par$, $bayes\_ci\_mean\_length$, $bayes\_ci\_coverage$, $boot\_ci\_mean\_length$ and $boot\_ci\_coverage$. The file can be found in the data folder of the created R package.
+
+\*subsubsection{Optimizing the Evaluation Code}
+
+The steps I've outlined in paragraph \ref{constructingCI} are computationally expensive. I generate a 1000 contingency tables and constructions of the conffidence interval requires 10000 simulations for Bayes and Bootstrap each. This amounts to $1000 * 10000 * 2 = 20,000,000$ simulations. 
+
+The values and calculations that do not require simulations are computed outside of a loop and subsequently outputted into the CSV file. These calculations include the actual PAR and the probabilities $p\_11$, $p\_10$, $p\_01$, $p\_00$. The simulations can then be executed in a loop, utilizing values from the file for each run. This approach allows me to divide the simulation into smaller subsets, enabling me to select a sufficiently large subset to run on my machine.
+
+To further enhance the speed of the simulation, I have implemented several optimizations. For instance, I compile the functions, as demonstrated in \ref{compileCode}. Machine code is faster to run then un compiled code. Compiling can be done by calling the $compile_all$ function.
+
+Additionally, I utilize the $parallel$ package to execute the multible samples in parallel, allowing it to leverage the available cores on my machine. The simulation can utilize all cores if no other processes are running; otherwise, it will run on any unused cores. The variables 'start' and 'end' represent the starting and ending rows of the file that define the subset to be processed. I am enabling parallel execution with the future package as follows
+
+\begin{lstlisting}
+    plan(multisession)
+    results <- future_map(start:end, function(i) {
+    ...
+\end{lstlisting}
+
+\section{Comparison of Pirikahu et al.'s Fully Bayesian method with Bootstrap Method}
+Run the eval code and print some figures here fron the CSV file.
+
+\subsection{Different Priors}
+Run eval code with different priors and print some figures here.

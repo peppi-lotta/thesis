@@ -1,10 +1,40 @@
 \chapter{Introduction} \label{sec:Intro}
 
-\section{Baysian Mindset}\label{BayesianMindset}
+The primary focus of this thesis is a paper written by \textit{Pirikahu et al. (2016)} by the title, \textit{Bayesian methods of confidence interval construction for the population attributable risk from cross-sectional studies}. This paper proposes a fully Bayesian approach to constructing a confidence interval for the population-attributable risk (PAR). The PAR value represents the percentage of cases in a population that would not have occurred had the exposure not taken place \cite{Pirikahu2016BayesianMO}.
 
-\section{Perseiving risk}\label{PerseivingRisk}
+Confidence intervals are typically associated with Frequentist statistics. Bayesian approaches do not directly produce confidence intervals but credibility intervals. We can create a credibility interval with Bayesian approach and use repeated sampling to determine whether the credibility interval exhibits the Frequentist properties of a confidence interval. I provide a more in-depth explanation of the differences between confidence and credibility intervals in sections \ref{ConfidenceIntervals}, \ref{CredibilityIntervals}, and \ref{BayesianConfidenceIntervals}.
 
-\section{The Problem}\label{TheProblem}
+\section{Task and Goal} \label{sec:Task}
 
-\section{The Solution}\label{TheSolution}
-\subsection{R package}\label{Rpackage}
+As a part of this thesis work, I will create an R package designed to construct a confidence interval for PAR based on the theoretical framework presented in the paper by \textit{Pirikahu et al. (2016)}. 
+
+Ideally, Bayesian data analysis follows a three-step process, which I will adhere to in this work. The steps are as follows
+
+\begin{itemize}
+    \item Full probability model: Create a model that is consistent with underlying scientific knowledge of the problem and, observed and unobserved data. 
+    \item Conditioning on observed data: Calculate and interpret the posterior distribution.
+    \item Evaluation: Assess the model fit and the implications of the posterior distribution.
+\end{itemize} \cite{Gel2014BayesianDA}
+
+The paper by \textit{Pirikahu et al. (2016)} provides a complete probability model for constructing a confidence interval in a single exposure scenario. I intend to implement this model within an R package and demonstrate with a workflow and real data how the code can be used. I aim to create an easy-to-use and efficient R package that researchers can utilize. I'm focusing on thorough documentation to minimize user errors. Documentation is created by adhering to the roxygen2 structure.
+
+Roxygen automatically generates a .Rd file from the comments in the R script without affecting code packageing and use \cite{roxygen2}. I've chosen to use Roxygen because it allowes me to maintain documentation alongside the code.
+
+I will evaluate the model and its expansions using simulated data. Evaluation happens by selecting specific parameters with known values and simulating data that correspond to these specified values. The \textit{Pirikahu et al. (2016)} paper offers realistic values commonly employed in epidemiology. 
+
+In addition to the R package, another concrete outcome of this work is a data table containing evaluation results. Running evaluation with simulations is very resource-intensive. I have created a structure in the evaluation code that allows me to run in subsections and output the results in a CSV file.
+
+Furthermore, I will explore potential expansions to the model. The model outlined in the paper is limited to single-exposure scenarios. I will extend the model to a hierarchical model. The hierarchical model will consist of two levels, allowing two variables to be taken into account instead of just one when calculating an outcome. I will demonstrate and evaluate how the expansions code works using simulated data.
+
+\section{Structure} \label{sec:Structure}
+
+Population-attributable risk describes the potential reduction in disease occurrences if a specific risk factor is eliminated from a population. PAR is a conditional value that can be derived with Bayes' theorem, which provides a mathematical foundation for this thesis work. In the next chapter, chapter \ref{sec: Concepts}, I will begin by discussing Bayes' theorem and its relevance to the \textit{Pirikahu et al. (2016)} paper while providing sufficient context for understanding the underlying theory.
+
+I will outline fundamental statistical terms crucial for later sections of this work. I will also present an overview of Bayesian inference, highlighting key characteristics and concepts such as prior and posterior distributions and likelihood. I assuming the target audience of this thesis are students of Faculty of technology and have limited prior knowledge of statistics.
+
+In chapter \ref{sec:bayesian-model}, I will delve into the model described in by \textit{Pirikahu et al. (2016)}, providing a detailed explanation and the necessary mathematical background. This chapter will also include descriptions of the code I created as part of this thesis, instructions on how to use it, and code for evaluating the model with simulated data. I also discuss the results of the evaluation in this chapter and provide figures and tables to illustrate the outcomes.
+
+In chapter \ref{sec: Expanding}, I discuss expanding the model to a two-level hierarchical model. 
+
+\section{AI Disclaimer} \label{sec:AI}
+I have utilized ChatGPT versions 3 and 4 to generate ideas for the structure of this thesis. All content has been composed by me from sources I have explicitly cited. While I found the AI helpful for brainstorming, I did not rely on it to generate the content. I have used Grammarly to enhance grammar and structure sentences in my text.

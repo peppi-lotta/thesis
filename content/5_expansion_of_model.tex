@@ -1,0 +1,15 @@
+\chapter{Expanding the Pirikahu Approach} \label{sec:Expanding}
+
+Data pertaining to humans or animals often exhibit hierarchical structures, whether deliberately organized or otherwise, and this aspect should not be overlooked \cite{Goldstein2010MultilevelSM}. To enhance the approach introduced by \textit{Pirikahu et al. (2016)}, it is essential to adopt a hierarchical model. This expansion will enable us to calculate the variability in the PAR across different subgroups, allowing for a more precise understanding of how subgroup-specific characteristics contribute to this variability.
+
+\section{Hierarchical Model} \label{hierarchicalExpansion}
+Hierarchical models, commonly referred to as multilevel models, leverage the knowledge gained from previous clusters when addressing new ones. These clusters may consist of individuals, groups, locations, or, in the context of this work, populations. The advantages of multilevel models include improved estimations, as well as the mitigation of the bias caused by over-sampled clusters dominating the inferences. Furthermore, these models implicitly account for variation and better preserve uncertainty, thereby avoiding unnecessary data transformation \cite{Mcelreath2015StatisticalRA}.
+
+Data can exhibit hierarchical, nested, or clustered structures. A hierarchy comprises units organized at varying levels, with groupings occurring even in random formations. The membership of these groups, and vice versa, influences the characteristics of their members \cite{Goldstein2010MultilevelSM}. Typically, datasets consist of samples that serve as the lowest-level units but can be organized into higher-level units. For instance, a dataset containing student information can have students as the lowest-level units, which can then be grouped by class, school, or district. Students from a single school form a distinct cluster \cite{HierarchicalModelsForSurveyData}.
+
+\subsection{2-Level Model} \label{2levelModel}
+
+\section{Code} \label{HCode}
+The code implementation for the basic Pirikahu approach primarily utilizes the rdirichlet function from the MCMC library. However, implementing the multilevel model requires a more specialized approach. 
+
+The brms library offers an effective framework for hierarchical models, standing for Bayesian regression models using Stan \cite{brms}.

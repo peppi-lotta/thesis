@@ -3,17 +3,20 @@
 ## Import and source the necessary packages and functions
 
 ```{r}
-if (!require(MCMCpack)) {
   install.packages("MCMCpack")
-  library(MCMCpack)
-}
-if (!require(dplyr)) {
   install.packages("dplyr")
-  library(dplyr)
-}
+  install.packages("compiler")
+```
 
-# Load the par_package.R file where all the functions are defined
-source('par_package.R')
+```{r}
+  library(MCMCpack)
+  library(dplyr)
+  library(compiler)
+```
+
+```{r}
+devtools::install_github("peppi-lotta/par")
+library(par)
 ```
 
 ## Read the data and calculate BMI
@@ -31,6 +34,9 @@ data <- read.csv(file_path)
 # Calculate BMI and add 1 or 0
 data <- data %>%
   mutate(over_weight = ifelse(weight/((height/100)^2) > 24.99, 1, 0))
+
+data_m <- data %>% filter(sex == 1)
+data_w <- data %>% filter(sex == 2)
 ```
 
 ## Calculate the population attributable risk and confidence interval
@@ -38,168 +44,93 @@ data <- data %>%
 ```{r}
 exposure_col <- "over_weight"
 outcome_col <- "cardio"
-interval = 0.95
-prior = c(1, 1, 1, 1)
-# Create a 2x2 contingency table
-ct <- create_2x2_contingency_table(data, exposure_col, outcome_col)
+
+table <- table(
+data[[exposure_col]],
+data[[outcome_col]],
+dnn = c(
+    exposure_col,
+    outcome_col
+))
+
+# Extract the values of a, b, c, and d from the data
+x <- extract_abcd(data, exposure_col, outcome_col)
 
 # Calculate the population attributable risk
-par <- calculate_par(
-  c(ct$x_1e1d, ct$x_1e0d, ct$x_0e1d, ct$x_0e0d, ct$n)
-)
+par <- calculate_par(x)
 
-print(ct$contingency_table)
+print(table)
 cat("PAR: ", par, "\n")
 ```
 
 ```{r}
+interval = 0.95
+prior = c(1, 1, 1, 1)
 # Calculate the confidence interval
 bay_ci <- calculate_bayesian_ci(
-  c(ct$x_1e1d, ct$x_1e0d, ct$x_0e1d, ct$x_0e0d, ct$n),
+  x,
   interval,
-  prior
+  prior,
+  10000
 )
 
-cat("Confidence Interval: ", bay_ci$confidence_interval, "\n")
-hist(bay_ci$par_samples, main = "Histogram of PAR samples", xlab = "PAR", ylab = "Frequency")
-plot(bay_ci$par_samples, main = "Trace plot of PAR samples")
+cat("Confidence Interval:\n")
+print(bay_ci)
+```
+
+```{r}
+exposure_col <- "over_weight"
+outcome_col <- "cardio"
+interval = 0.95
+prior = c(1, 1, 1, 1)
+
+# Extract the values of a, b, c, and d from the data
+x <- extract_abcd(data_active, exposure_col, outcome_col)
+par <- calculate_par(x)
+bay_ci <- calculate_bayesian_ci(
+  x,
+  interval,
+  prior,
+  10000
+)
+
+cat("PAR for active: ", par, "\n")
+cat("Confidence Interval for active:\n")
+print(bay_ci)
+
+# Extract the values of a, b, c, and d from the data
+x <- extract_abcd(data_not_active, exposure_col, outcome_col)
+par <- calculate_par(x)
+bay_ci <- calculate_bayesian_ci(
+  x,
+  interval,
+  prior,
+  10000
+)
+
+cat("PAR for non active: ", par, "\n")
+cat("Confidence Interval for non active:\n")
+print(bay_ci)
 ```
 
 ## Bootstrap the population attributable risk and confidence interval
 
 ```{r}
-
 # Calculate the confidence interval
 boot_ci <- calculate_bootstrap_ci(
-  c(ct$x_1e1d, ct$x_1e0d, ct$x_0e1d, ct$x_0e0d, ct$n),
-  interval
+  x,
+  interval,
+  10000
 )
 
-cat("Confidence Interval: ", boot_ci$confidence_interval, "\n")
-hist(boot_ci$par_samples, main = "Histogram of PAR samples", xlab = "PAR", ylab = "Frequency")
-plot(boot_ci$par_samples, main = "Trace plot of PAR samples")
+cat("Confidence Interval:\n")
+print(boot_ci)
 ```
 
-# Evaluation
-
-## Sourse the necessary packages and functions
+## Multilevel model
 
 ```{r}
-if (!require(writexl)) {
-  install.packages("writexl")
-  library(writexl)
-}
-if (!require(data.table)) {
-  install.packages("data.table")
-  library(data.table)
-}
+# Evaluate efect of BMI on cardiovascular disease
+# but now let's group the data by physical activity
 
-# Load the par_package.R file where all the functions are defined
-source('par_package.R')
-```
-
-## Define the functions
-
-```{r}
-#' Get the values of a, b, c, and d for a given set of probabilities and N
-#' 
-#' @param p The probability of disease (D^+) given exposure (E^+)
-#' p = P(D^+ |E^+)
-#' @param q The probability of disease (D^+) given there is no exposure (E^-)
-#' q = P(D^+ |E^-)
-#' @param e The probability of exposure in total (E^+)
-#' e = P(E^+)
-#' @param n The number of observations
-#' n = n
-#' @return A list of values for a, b, c, and d
-#' where:
-#' a = p * e * n. The count of rows where both exposure and outcome are 1. 
-#' b = ( 1 - p ) * e * n. The count of rows where exposure is 1 and outcome is 0.
-#' c = q * ( 1 - e ) * n. The count of rows where exposure is 0 and outcome is 1.
-#' d = ( 1 - q ) * ( 1 - e ) * n. The count of rows where both exposure and outcome are 0.
-get_abcd <- function( p, q, e, n ) {
-  a <- p * e * n
-  b <- ( 1 - p ) * e * n
-  c <- q * ( 1 - e ) * n
-  d <- ( 1 - q ) * ( 1 - e ) * n
-
-  # Return values that are round to the nearest integer
-  return(list(a = round(a), b = round(b), c = round(c), d = round(d), n = n))
-}
-```
-
-## Calculate the coverage percentage
-
-```{r}
-dt <- data.table(
-  p = numeric(),
-  q = numeric(),
-  e = numeric(),
-  n = numeric(),
-  interval = numeric(),
-  bayes_lower = numeric(),
-  bayes_upper = numeric(),
-  boot_lower = numeric(),
-  boot_upper = numeric(),
-  calculated_par = numeric(),
-  actual_par = numeric()
-)
-
-# Define the values for p, q, e, and n
-p_values <- c(0.001, 0.01, 0.05, 0.1, 0.2, 0.3, 0.35, 0.4, 0.45, 0.5)
-q_values <- c(0.001, 0.01, 0.05, 0.1, 0.2, 0.3, 0.35, 0.4, 0.45, 0.5)
-e_values <- c(0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
-n_values <- c(16, 32, 64, 128, 256, 512, 1024, 4096, 16384, 65536)
-interval <- 0.95
-
-# Create a data frame with all combinations of the values
-combinations <- expand.grid(p = p_values, q = q_values, e = e_values, n = n_values)
-total_combinations <- nrow(combinations)
-pb <- txtProgressBar(min = 0, max = total_combinations, style = 3)
-
-# Loop through each combination
-for (i in 1:total_combinations) {
-  combination <- combinations[i, ]
-  values <- get_abcd(combination$p, combination$q, combination$e, combination$n)
-  actual_par <- combination$p * combination$e + combination$q * (1 - combination$e) - combination$q
-
-  a <- as.numeric(values$a)
-  b <- as.numeric(values$b)
-  c <- as.numeric(values$c)
-  d <- as.numeric(values$d)
-  n <- as.numeric(combination$n)
-
-  par <- calculate_par(c(a, b, c, d, n))
-
-  # Calculate the confidence interval
-  bayes_ci <- calculate_bayesian_ci(
-    c(a, b, c, d, n),
-    interval = interval,
-    prior = c(1, 1, 1, 1)
-  )
-  boot_ci = calculate_bootstrap_ci(
-    c(a, b, c, d, n),
-    interval = interval
-  )
-  
-  dt <- rbind(dt, list(
-    combination$p,
-    combination$q,
-    combination$e,
-    combination$n,
-    interval,
-    bayes_ci$confidence_interval[[1]],
-    bayes_ci$confidence_interval[[2]],
-    boot_ci$confidence_interval[[1]],
-    boot_ci$confidence_interval[[2]],
-    par, actual_par))
-
-  setTxtProgressBar(pb, i)
-}
-close(pb)
-```
-
-```{r}
-# Write the data frame to an Excel file
-write_xlsx(combinations, "combinations.xlsx")
 ```

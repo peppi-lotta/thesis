@@ -1,130 +1,170 @@
 \chapter{Key Consepts} \label{sec:Consepts}
 
-This chapter will provide understanding of the Bayesian approach. This chapter will lead the reader through Bayes' theorem to Bayesian inference and data-analytics. The meaning of population attributable risk and relevant consepts to statistics in general will be explored in this chapter.  
+This chapter will provide an understanding of the Bayesian approach. It will lead the reader through Bayes' theorem to Bayesian inference and data analytics. The meaning of population-attributable risk and relevant concepts to statistics, in general, will be explored in this chapter.  
 
 \section{Bayes' theorem}\label{BayesianTheorem}
 \begin{equation}
 P(A|B) = \frac{P(B|A)P(A)}{P(B)}
 \end{equation}
-where
-\begin{itemize}
-    \item $P(A|B)$ is the conditional probability \cite{Gut2005ProbabilityAG} or posterior distribution.\cite{Mcelreath2015StatisticalRA} $P(A|B)$ is the probability that A happens given that B has happened. If A and B are independent events, then $P(A|B) = P(A)$. \cite{Gut2005ProbabilityAG}
-    \item $P(B|A)$ is the likelihood\cite{Gut2005ProbabilityAG}\cite{Mcelreath2015StatisticalRA}
-    \item $P(A)$ is the prior probability \cite{Gut2005ProbabilityAG} or prior distribution.\cite{Mcelreath2015StatisticalRA}
-    \item $P(B)$ is the set of unobserved data. 
-\end{itemize}
 
-A person using this formula can just place values that they have acquired through frequentist approaches and get a conditional probability thus using the Bayes' theorem alone is not enough to make Bayesian inference. Bayesian inference is a broader philosophical and statistical approach to statistical inference.\cite{Mcelreath2015StatisticalRA} In the Bayesian approach the values of the posterior, prior and likelihood are no set but random values of a distribution.\cite{Gut2005ProbabilityAG} This allows us to make inference even when the exact values are not known and when data is limited.
+$P(A|B)$ is the conditional probability \cite{Gut2005ProbabilityAG} $P(A|B)$ is the probability that A happens given that B has happened. If A and B are independent events, then $P(A|B) = P(A)$. \cite{Gut2005ProbabilityAG}
+
+A person using \ref{BayesianTheorem} formula can place values acquired through Frequentist approaches and get a conditional probability; thus, using Bayes' theorem alone is insufficient to make a Bayesian inference. 
+
+Bayesian inference is a broader philosophical and statistical approach to statistical inference.\cite{Mcelreath2015StatisticalRA} In the Bayesian approach, the values of the posterior, prior, and likelihood are not set but random values of a distribution.\cite{Gut2005ProbabilityAG} This allows us to make inferences even when the exact values are unknown and when data is limited.
 
 \section{Key Statistics consepts}\label{RelevantConseptsOfStatistics}
-\subsection*{Probability mass function} \label{PropabilityMassFunction}
-Probability mass function describes the probability that a discrete random variable is equal to a certain value: $f(x) = P(X = x)$ $f(x)$ over all $x$ equals to 1.\cite{pmf}
 
-\subsection*{Multinomial distribution}\label{MultinomialDistribution}
-Properties of the multinomial distribution: fixed number of trials, trials are independent from each other, samples have a fixed set of outcomes. The Probability mass function of the multinomial distribution is:
+This chapter defines some key statistical concepts that are relevant to the approach defined by \textit{Pirikahu et al. (2016)} and Bayesian inference.
+
+\subsection{Probability mass function} \label{PropabilityMassFunction}
+
+The probability mass function describes the probability that a discrete random variable is equal to a certain value: $f(x) = P(X = x)$. $f(x)$ over all $x$ equals to 1.\cite{pmf}
+
+\subsection{Multinomial distribution}\label{MultinomialDistribution}
+
+Properties of the multinomial distribution are 
+\begin{itemize}
+    \item fixed number of trials independent from each other
+    \item samples have a fixed set of outcomes
+\end{itemize}
+
+Probability mass function of the multinomial distribution is:
+
 \begin{equation}
 f(x_1, x_2, ..., x_k) = \frac{n!}{x_1!x_2!...x_k!}p_1^{x_1}p_2^{x_2}...p_k^{x_k}
 \end{equation}, where $n = x_1 + x_2 + ... + x_{k-1} + x_k$\cite{multinomialDistribution}\cite{SINHARAY201098}
 
-In Bayesian analysis Dirichlet distribution is often used as a prior distribution to model a multinomial distribution. \cite{SINHARAY201098} This is often considered a standard reference prior.\cite{Pirikahu2016BayesianMO}
+In Bayesian analysis, Dirichlet distribution is often used as a prior distribution to model a multinomial distribution. \cite{SINHARAY201098} This is considered a standard reference prior.\cite{Pirikahu2016BayesianMO}
 
-\subsection*{Confidence intervals}\label{ConfidenceIntervals}
-Confidence interval measures uncertainty of the estimate. The interval has a upper and lower limit and the true estimate lies with in that interval with some conffidence level. Width of the confidence interval is determined by two factors: sample size n, and standard diviation or standard error of the estimate. Confidence level in health sciences ís usually chosen to be 95\%.\cite{Hespanhol2019UnderstandingAI}
+\subsection{Confidence intervals}\label{ConfidenceIntervals}
 
-Confidence interval is a frequentist term. Confidence interval is based on repeated sampling theory.\cite{Schoot2014BayesianA} Confidence interval is a range of numbers that is likely to include the unknown population parameter that is being estimated.\cite{Illowsky2013IntroductorySO} This is also known as the regression coefficient, a term that describes the relationship between the predictor variable and outcome.\cite{RegressionCoefficients} For 95\% CI the interval will contain the regression coefficient 95 out of 100 times when repeated.\cite{Schoot2014BayesianA} This is different from having a 95\% probability that the regression coefficient is in the interval. In frequentist statistics parameters aren's assigned propabilities. \cite{FornaconWood2022UnderstandingTD}
+Confidence interval is a frequentist term and it is based on repeated sampling theory.\cite{Schoot2014BayesianA} Confidence interval is a range of numbers likely to include the unknown population parameter being estimated.\cite{Illowsky2013IntroductorySO} The confidence interval measures the uncertainty of an estimate. The interval has an upper and a lower limit. The true estimate lies within that interval some chosen percent of the time. The width of the confidence interval is determined by two factors: sample size $n$ and standard deviation or standard error of the estimate. It is standard in health sciences to set the interval to be 95\%.\cite{Hespanhol2019UnderstandingAI}
 
-\subsection*{Credibility intervals}\label{CredibilityIntervals}
-Credibility interval is the Bayesian equivalent of confidence interval. It is a probability that the true value is contained in the chosen interval. 95\% credibility interval means that there is 95\% probability that the true value is in the interval. The frequentist confidence interval is often missinterpered this way. This is why the credibility interval is more intuitive than the confidence interval.\cite{FornaconWood2022UnderstandingTD} 
-Tail method is a way of constructing the credibility interval. It sets the lower and uper limits by symmetrically cutting the interval between both tails of a distribution. The limit are $\alpha\ /\ 2$ and $1\ -\ \alpha\ /\ 2$ percentage points of the distribution. If the selected interval is 95\% then $\alpha$ is 0.05. \cite{Shi2009BayesianCI}
+Confidence interval is also known as the regression coefficient, a term that describes the relationship between the predictor variable and outcome.\cite{RegressionCoefficients} For 95\% CI, the interval will contain the regression coefficient 95 out of 100 times when repeated.\cite{Schoot2014BayesianA} 
+
+Confidence interval is differs from having a 95\% probability that the regression coefficient is in the interval. In Frequentist statistics, parameters are not assigned probability values. \cite{FornaconWood2022UnderstandingTD} This hower is not the case in Bayesian statistics.
+
+\subsection{Credibility intervals}\label{CredibilityIntervals}
+
+Credibility intervals describes a probability that the true value is within the chosen interval. 95\% credibility interval means that there is a 95\% probability that the true value is in the interval. The Frequentist confidence interval is often misinterpreted this way. And that is why the credibility interval is said to be more intuitive than the confidence interval.\cite{FornaconWood2022UnderstandingTD} 
+
+The tail method is a way of constructing the credibility interval. It sets the lower and upper limits by symmetrically cutting the interval between both tails of a distribution. The limit are $\alpha\ /\ 2$ and $1\ -\ \alpha\ /\ 2$ percentage points of the distribution. If the selected interval is 95\%, then $\alpha$ is 0.05. \cite{Shi2009BayesianCI}
 
 \subsection{Bayesian confidence intervals}\label{BayesianConfidenceIntervals}
-Bayesian credible interval is a confidence interval if it demonstraits the frequentist properties of a confidence interval. This can be observed by calculating the overall percentage coverage for simulated data where various fixed parameters are set. \cite{Pirikahu2016BayesianMO} \cite{Shi2009BayesianCI} Coverage percentage will show if the interval is nominal or not. \cite{Pirikahu2016BayesianMO} 
+
+Bayesian credible interval is a confidence interval if it demonstrates the Frequentist properties of a confidence interval. Whether an interval demonstrates Frequentist characteristics can be observed by calculating the overall percentage coverage for simulated data where various fixed parameters are set. \cite{Pirikahu2016BayesianMO} \cite{Shi2009BayesianCI} Coverage percentage will show whether the interval is nominal. \cite{Pirikahu2016BayesianMO} 
 
 \section{Bayesian Inference}\label{BayesianInference}
-Inference means summary or characterization\cite{Robert2007TheBC}. It is the process of finding an appropriate model and fitting it to a set of data.\cite{Gel2014BayesianDA} Statistical inference's goal is to make predictions about an unobserved set of data y based on already observed set of data x.\cite{Lindley1990The1W}\cite{Gel2014BayesianDA} The Bayesian approach to describing this connection is trough probability that y happens given x. If $x = \{x_1, x_2, ..., x_n \}$ and $y = x_{n + 1}$ then:
-\begin{equation}
+
+Inference means summary or characterization\cite{Robert2007TheBC}. It is the process of finding an appropriate model and fitting it to a data set.\cite{Gel2014BayesianDA} Statistical inference's goal is to make predictions about an unobserved set of data $y$ based on an already observed set of data $x$.\cite{Lindley1990The1W}\cite{Gel2014BayesianDA} The Bayesian approach to describing this connection is through probability that $y$ happens given that $x$ has happened. If $x = \{x_1, x_2, ..., x_n \}$ and $y = x_{n + 1}$ then probability $P(y|x)$ is
+
+\begin{equation}\label{BayesRuleWithX}
 P(y|x) = P(x_{n + 1}|\{x_1, x_2, ..., x_n \})
 \end{equation}
 
-When the amount of observation $x_i$ starts to grow it becomes increasingly more difficult to calculate the effect of each observation on y. The formula can be simplified to $P(y|\theta)$ where $\theta$ is a distribution where $x_i$ are independent and identically distributed i.e. iid. This simplifies the problem because we can assume $x_i$ depends only on $\theta$ and not on other $x_j$.\cite{Lindley1990The1W} This way of expressing uncertainty via a distribution, leans on the concept on exchangeability. Exchangeability is a basic concept of statistical analysis. \cite{Gel2014BayesianDA}  There is no operational difference between $\theta$ which describes belief and $P(x|\theta)$ which is a measurable quantity. They both describe uncertainty. $P(x|\theta)$ is an updated version of the prior. The Bayes' theorem becomes: 
+When the amount of observation $x_i$ starts to grow, it becomes increasingly difficult to calculate the effect of each observation on y. 
+
+Rormula \ref{BayesRuleWithX} can be simplified to $P(y|\theta)$ where $\theta$ is a distribution where $x_i$ are independent and identically distributed, i.e., iid. $x_i$ depends only on $\theta$ and not on other $x_j$.\cite{Lindley1990The1W} This way of expressing uncertainty via a distribution leans on the concept of exchangeability. Exchangeability is a basic concept of statistical analysis. \cite{Gel2014BayesianDA}
+
+There is no operational difference between $\theta$ which describes belief and $P(x|\theta)$ which is a measurable quantity. They both describe uncertainty. $P(x|\theta)$ is an updated version of the prior. With prior knowlwdge added the Bayes' theorem becomes:
+
 \begin{equation}
 P(x|\theta) = \frac{P(\theta|x)P(x)}{P(\theta)}
 \end{equation}
 \cite{Pawitan2002InAL}
 
-\subsection{Bayesian Data-analysis}\label{BayesianDataAnalysis}
-Ideally Bayesian data-analysis is a three step process: 
-\begin{itemize}
-    \item Full probability model: A model that is consistent with underlying scientific knowledge of the problem and, observed and unobserved data. 
-    \item Conditioning on observed data: Calculating and interpreting the posterior distribution.
-    \item Evaluation: fit of the model and the implications of the posterior distribution.
-\end{itemize}\cite{Gel2014BayesianDA}
-
 \subsection{Prior}\label{Prior}
-Prior distribution is the knowledge we have of the subject matter before we take into account the data.\cite{Box1973BayesianII} Prior provides the plausibility for all parameters before the data is taken into account. \cite{Mcelreath2015StatisticalRA}\cite{Robert2007TheBC} Prior distribution is the best way to summarize information and lack of it.\cite{Robert2007TheBC} 
 
-$\theta$ can be chosen based on some previous inference obtained by Bayesian approach. Even if there is no prior distribution available a prior must be chosen and this should not be completely arbitrary. Almost always there a some domain knowledge available that will help choose the most suitable prior.\cite{Mcelreath2015StatisticalRA} Choosing a prior is still often at least partly arbitrary.\cite{Robert2007TheBC} Whether the prior is a posterior distribution or a distribution chosen by some other means, it doesn't make a difference qualitatively. Prior distribution is a distribution that describes prior beliefs of the person doing the inference.\cite{Lindley1990The1W} The prior can have a great effect on the posterior. Bad priors can lead to misleading posteriors and bad inference.\cite{Mcelreath2015StatisticalRA} Priors can have a negligible, moderate or highly noticeable effect on the posterior.\cite{Robert2007TheBC}
+Prior distribution is the knowledge we have of the subject matter before we take into account the data.\cite{Box1973BayesianII} Prior contains the plausibility for all parameters before the data has been taken into account. \cite{Mcelreath2015StatisticalRA}\cite{Robert2007TheBC} Prior distribution is the best way to summarize information and lack of it.\cite{Robert2007TheBC}
 
-The priors mainly used in this thesis are the conjugate priors. Prior distribution is conjugate to the likelihood if the prior belongs to the same distribution family as the posterior distribution. Prior is chosen so that the parametric form of the prior is the same as the posterior's. This is to make calculating posterior easiest. \cite{SUGIYAMA2016185}
 
-Some other types of priors are: maximum entropy prior, parametric approximations, Laplace’s prior, the Jeffrey's prior, empirical, hierarchical, matching priors, reference priors, and invariant priors. \cite{Robert2007TheBC}
+$\theta$ is the prior distribution. $\theta$ can be chosen based on some previous inference. Even if no prior distribution is available, a prior must be selected. Almost always, some domain knowledge is available and should be used to help choose the most suitable prior.\cite{Mcelreath2015StatisticalRA} Regardless of prior knowledge, choosing a prior is often at least partly arbitrary.\cite{Robert2007TheBC}
 
-Prior distribution is not the only distribution that affects the posterior. Another factor in calculating the posterior is the likelihood.
+Whether the prior is a posterior distribution or a distribution selected by some other means, it doesn't make a difference qualitatively. The prior distribution is a distribution that describes the prior beliefs of the person making the inference.\cite{Lindley1990The1W} The prior can significantly affect the posterior. Bad priors can lead to misleading posteriors and bad inference.\cite{Mcelreath2015StatisticalRA} Priors can have a negligible, moderate, or highly noticeable effect on the posterior.\cite{Robert2007TheBC}
+
+Calculating the posterior becomes easier when the prior is selected from the same family as the posterior. Prior is chosen so that the parametric form of the prior is the same as the posterior's. The prior distribution is conjugate to the likelihood that the prior belongs to the same distribution family as the posterior distribution. \cite{SUGIYAMA2016185} The priors mainly used in this thesis are the conjugate priors.
+
+Some other types of priors are maximum entropy prior, parametric approximations, Laplace's prior, Jeffrey's prior, empirical, hierarchical, matching priors, reference priors, and invariant priors. \cite{Robert2007TheBC}
+
+The prior distribution is not the only distribution that affects the posterior. The likelihood is another factor in calculating the posterior.
 
 \subsection{Likelihood}\label{Likelihood}
-Likelihood or likelihood function has meaning outside of the Bayesian approach. Here I will give a definition of likelihood in the context of Bayesian inference. Every time likelihood is mentioned in this thesis work this is the definition that applies. 
+Likelihood or likelihood function has meaning outside of the Bayesian approach. Here, I will define likelihood in the context of Bayesian inference. Every time likelihood is mentioned in this thesis work, this definition applies. 
 
-Likelihood function contains the information that $x_i$ brings to the inference. \cite{Robert2007TheBC} Likelihood is derived by forming all data sequences and removing the ones that are inconsistent with the observed data. It usually is the distribution function assigned to a variable or distribution of variables. \cite{Mcelreath2015StatisticalRA} The information provided by $X_1$ about $\theta$ is contained in the distribution $l(\theta|x_1)$. When a new observation $x_2$ is made it needs to comply with equation:
+Likelihood function contains the information that $x_i$ brings to the inference. \cite{Robert2007TheBC} Likelihood is derived by forming all data sequences and removing the ones inconsistent with the observed data. It usually is the distribution function assigned to a variable or distribution of variables. \cite{Mcelreath2015StatisticalRA} The information provided by $X_1$ about $\theta$ is contained in the distribution $l(\theta|x_1)$. When a new observation $x_2$ is made, it needs to comply with equation
+
 \begin{equation}\label{LikelihoodPrinsiple}
 l_1(\theta|x_1) = cl_2(\theta|x_2)
-\end{equation}
-\cite{Robert2007TheBC}. This is called the likelihood principle, and it is valid when the inference is about the same $\theta$ and $\theta$ includes every unknown factor of the model. \cite{Robert2007TheBC}. Bayesian inference obeys the likelihood principle. Simply put: two probability models that have the same likelihood function lead to the same inference for $\theta$ given a sample of data.\cite{Gel2014BayesianDA}
-When the sample size increases the meaning of the likelihood grows with it. \cite{Mcelreath2015StatisticalRA} The prior is modified by the data $x$ trough the likelihood function. It represents the information about $\theta$ coming from the data. In \ref{LikelihoodPrinsiple} $c$ is a constant. Multiplication by a constant leaves the likelihood function unchanged. Only the relative value of the likelihood matters and multiplying by a constant will have no effect on the posterior $\theta$. By normalizing the right side of \ref{BayesRuleWithConstants} the constant will be canceled out.\cite{Box1973BayesianII}
+\end{equation}\cite{Robert2007TheBC}.
+
+Equation \ref{LikelihoodPrinsiple} is called the likelihood principle, and it is valid when the $\theta$ in both sides of the equation is the same. $\theta$ includes every unknown factor of the model. \cite{Robert2007TheBC}. Bayesian inference obeys the likelihood principle. Two probability models that have the same likelihood function lead to the same inference for $\theta$ given a sample of data.\cite{Gel2014BayesianDA}
+
+When sample size increases, the meaning of the likelihood increases in relation to it. \cite{Mcelreath2015StatisticalRA} The prior is modified by the data $x$ trough the likelihood function. It represents the information about $\theta$ coming from the data. In \ref{LikelihoodPrinsiple} $c$ is a constant. Multiplication by a constant leaves the likelihood function unchanged. Only the relative value of the likelihood matters, and multiplying by a constant will have no effect on the posterior $\theta$. The constant will be canceled by normalizing the right side of \ref{BayesRuleWithConstants}.\cite{Box1973BayesianII}
  
 \subsection{Posterior}\label{Posterior}
-The simplest definition for a posterior is the probability p conditional on the data.\cite{Mcelreath2015StatisticalRA} Posterior is what we know of the distribution $\theta$ given the knowledge of some observed data.
-As outlined in paragraphs \ref{Prior} and \ref{Likelihood} we know that likelihood is the only entity modifying the prior so we get the simplified version of Bayes rule: $posterior\ distribution \propto likelihood \times prior\ distribution$ where: 
+The simplest definition for a posterior is the probability $p$ conditional on data.\cite{Mcelreath2015StatisticalRA} Posterior is what we know of the distribution $\theta$ given the knowledge of some observed data. As outlined in paragraphs \ref{Prior} and \ref{Likelihood}, we know that likelihood is the only entity modifying the prior, so we get the simplified version of Bayes rule: $posterior\ distribution \propto likelihood \times prior\ distribution$ where,
+
 \begin{equation}\label{BayesRuleWithConstants}
 P(\theta|x) \propto cP(x|\theta)P(\theta)
 \end{equation}\cite{Box1973BayesianII}
 
-Posterir is often mathematically complex and high-dimentional and direct inference on it is not possible. The number of dimensions is equal to the number of parameters. The posterior function is often an integral that is not solvable by analytical means and the posterior distribution can not be evaluated exactly. Sampling the posterior provides a solution for this.\cite{vandeSchoot2020BayesianSA}
-Some leading methods like ones based on Markov chain Monte Carlo (MCMC) only produce samples of the posterior instead of a mathematical function of the posterior.\cite{Mcelreath2015StatisticalRA}
+Posterior is often mathematically complex, high-dimensional and direct inference is impossible. The number of dimensions is equal to the number of parameters. The posterior function is often an integral that is not solvable analytically, and the posterior distribution can not be evaluated exactly. Sampling the posterior provides a solution for this.\cite{vandeSchoot2020BayesianSA} Some leading sampling methods, like ones based on Markov chain Monte Carlo (MCMC), only produce samples of the posterior instead of a mathematical function of the posterior.\cite{Mcelreath2015StatisticalRA}
 
 \subsection{Posterior Sampling}\label{PosteriorSampling}
-Posterior sampling can be used to summarize and simulate the posterior. Samples are drawn from a "bucket" where values are present in the porportion to their posterior probability. Samples will have the same distribution as the actual posterior. The more samples are drawn the more exact the distribution will be. Sampling is a part of the evaluation phase of Bayesian data-analysis.
+
+Posterior sampling can be used to summarize and simulate the posterior. Samples are drawn from a "bucket" where values are present in proportion to their posterior probability. The samples will have the same distribution as the actual posterior. The more samples are drawn, the more exact the distribution will be. Sampling is part of the evaluation phase of Bayesian data analysis.
+\cite{Mcelreath2015StatisticalRA}
+
 \subsubsection*{Summarize}
-Question is summarization are divided into tree categories: 
+
+Summarization is divided into three categories
+
 \begin{itemize}
     \item Intervals of defined boundaries: questions about the frequency of the parameters in the posterior in chosen intervals.
-    \item Intervals of defined mass: questions about conffidence and credibility intervals. 
-    \item Point estimates: questions about single points in posterior distribution.
+    \item Intervals of defined mass: questions about confidence and credibility intervals. 
+    \item Point estimates: questions about single points in the posterior distribution.
 \end{itemize}
-\subsubsection*{Simulate}
-Simulationis are done to check the model and make predictions. Simulation can be done on a prior distribution to understand it better. Sampling from a known distribution will allow testing whether a model is working correctly. Simulation can also be used to predict possible future observations. \cite{Mcelreath2015StatisticalRA}
+
+\subsubsection*{Simulation}
+
+Simulations are done to check the model and make predictions. Simulation can be done on a prior distribution to understand it better. Sampling from a known distribution will allow testing of whether a model is working correctly. Simulation can also be used to predict possible future observations. \cite{Mcelreath2015StatisticalRA}
+
 \section{PAR, Population attributable risk}\label{PAR}
-Population attributable risk measures the impact of complete removal of a risk factor in a population. 
+
+Population-attributable risk measures the impact of completely removing a risk factor in a population.
+
 \begin{equation} \label{PARequation}
 PAR = P(D^+) - P(D^+| E^-)
 \end{equation}
-, where D is the disease status and E is the exposure status. PAR is a probability distribution that is calculated by removing the probability distribution of disease cases that occur given that an exposure has not happened from the probability distribution of all disease occurrences . \cite{Pirikahu2016BayesianMO}
-\section{Cross-sectional study}\label{CrossSectionalStudy}
-Cross-sectional study is a snapshot of a population at a certain point in time. Both the exposure and outcome can be observed at the same time. Individuals for observation are chosen from population that is relevant for the study. This study method does not take into account new cases of the desease that develope over a selected period of time. 
 
-Subtypes of cross-sectional study:
+where D is the disease status, and E is the exposure status. PAR is a probability distribution calculated by removing the probability distribution of disease cases, given that exposure has not happened from the probability distribution of all disease occurrences. \cite{Pirikahu2016BayesianMO}
+
+\section{Cross-sectional study}\label{CrossSectionalStudy}
+
+A cross-sectional study is a snapshot of a population at a certain point in time. Both the exposure and outcome can be observed at the same time. Individuals for observation are chosen from the population that is relevant for the study. This study method does not consider new cases of the disease that develop over a selected period of time. 
+
+Subtypes of cross-sectional studies are
 \begin{itemize}
-    \item Descriptive cross-sectional study is good for evaluating the prevalence of one or more health outcomes in a population.
-    \item Analytical cross-sectional study measures prevalence of outcomes end exposures.  It's difficult to figure out causal relationships based on cross-sectional study alone. 
-    \item Repeated cross-sectional study is conducted multiple times on the same population at different points in time. The individuals chosen for the tests at different study instances are not the same individuals. This type of study is good for showing changes happening in a population over time.
-\end{itemize}
-\cite{Wang2020CrossSectionalSS} 
+    \item A Descriptive cross-sectional study: good for evaluating the prevalence of one or more health outcomes in a population.
+    \item Analytical cross-sectional study: measures the prevalence of outcomes end exposures. It's challenging to figure out causal relationships based on cross-sectional study alone. 
+    \item A Repeated cross-sectional study: conducts a study multiple times on the same population at different points in time. The individuals chosen for the tests at different study instances are not the same individuals. This type of study is good for showing changes in a population over time.
+\end{itemize} \cite{Wang2020CrossSectionalSS} 
 
 \section{Frequentist approach to confidence interval construction for PAR}\label{FrequentistApproach}
-Delta method is the standard approach to variance estimation for PAR. Bootstrap method outperform the delta method in terms of coverage and interval length. \cite{Pirikahu2016BayesianMO} As the bootstap performs better than delta method I will be comparing the Bayesian approach to the bootstrap method.
+
+The Delta method is the standard approach to variance estimation for PAR. The bootstrap method outperforms the delta method in terms of coverage and interval length. \cite{Pirikahu2016BayesianMO} As the bootstrap performs better than the delta method, I will compare the Bayesian approach to the bootstrap method.
 
 \subsection{Bootstrap method}\label{Bootstrap}
-Bootstarp method approximates the distribution of a statistic by repeted sampling. The samples are drawn from a fitted model or from a dataset with replacement AKA placing the sample back to the "sample bucket". Drawing from fitted model is parametric and drawing from dataset with replacement is non-parametric. 
-A contingency table has a cell for each classification. A dataset with one exposure and one outcome can be represented in a 2x2 contingency table with four classifications. The propability of selecting a classification is the same as the estimated value in a parametric model. The parametric and non-parametric bootstraps for a 2x2 contingency table are the same when sample size is the same as the size of the dataset.\cite{Pirikahu2016BayesianMO} 
+
+The Bootstrap method approximates the distribution of a statistic by repeated sampling. The samples are drawn from a fitted model or from a dataset with replacement, AKA placing the sample back into the "sample bucket. Drawing from a fitted model is parametric, and drawing from a dataset with replacement is non-parametric. 
+
+A contingency table has a cell for each classification. A dataset with one exposure and one outcome can be represented in a 2x2 contingency table with four classifications. The probability of selecting a classification is the same as the estimated value in a parametric model. The parametric and non-parametric bootstraps for a 2x2 contingency table are the same when the sample size is the same as the dataset size.\cite{Pirikahu2016BayesianMO} 
 
 \section{R language}\label{Rlanguage}
-R is a language and environment for statistical computing and graphics. R is available as Free Software under the terms of the Free Software Foundation's GNU General Public License in source code form. R is a GNU project. R is an environment where statistical techniques are implemented. It can be extended with the usage of packages. \cite{RWebPage} The base R has functions to perform all major statistical tests, plotting, and matrix operations. It is provided as a combination of 14 different core packages: base, compiler, datasets, grDevices, graphics, grid, methods, parallel, splines, stats, stats4, tcltk, tools and utils. Package can be then loaded with the library() command once installed on a machine. R's functionality can be divided into three classes: data interaction, analysis, and result visualization. There are three major repositories for additional R packages: CRAN, Bioconductor and R-Forge. CRAN package, devtools, provides a convenient function to install packages directly from a GitHub repository. \cite{Giorgi2022TheRL}
+
+R is a language and environment for statistical computing and graphics. R is available as Free Software under the Free Software Foundation's GNU General Public License terms in source code form. R is a GNU project. R is an environment where statistical techniques are implemented. It can be extended with the usage of packages. \cite{RWebPage}
+
+The base R has functions to perform all major statistical tests, plotting and matrix operations. It is provided as a combination of 14 different core packages: base, compiler, datasets, grDevices, graphics, grid, methods, parallel, splines, stats, stats4, tcltk, tools, and utils. Once installed on a machine, the package can then be loaded with the library() command.
+
+R's functionality can be divided into data interaction, analysis, and result visualization. There are three major repositories for additional R packages: CRAN, Bioconductor, and R-Forge. CRAN package, devtools, provides a convenient function for installing packages directly from a GitHub repository. \cite{Giorgi2022TheRL}
