@@ -94,6 +94,8 @@ calculate_paf <- function(x) {
 #'
 #' @importFrom MCMCpack rdirichlet
 #'
+#' @param type String, type of the measure to calculate. Possible values are
+#' "par" and "paf".
 #' @param x A vector containing the values of a, b, c, and d
 #' in this order. Where
 #' a: The count of rows where both exposure and outcome are 1.
@@ -118,11 +120,12 @@ calculate_paf <- function(x) {
 #'
 #' @examples
 #' # Example usage:
-#' x <- extract_abcd(data, "exposure", "outcome")
-#' calculate_bayesian_ci(x, 0.99, c(1, 1, 0.001, 0.001), 5000)
+#' x <- extract_abcd(data, "exposure_col_name", "outcome_col_name")
+#' calculate_bayesian_ci("par", x, 0.99, c(1, 1, 0.001, 0.001), 5000)
 #'
 #' @export
 calculate_bayesian_ci <- function(
+  type,
   x,
   interval = 0.95,
   prior = c(1, 1, 1, 1),
@@ -149,7 +152,13 @@ calculate_bayesian_ci <- function(
   )
   samples <- apply(samples, 2, function(x) x * n)
 
-  par_samples <- apply(samples, 1, calculate_par)
+  if (type == "par") {
+    par_samples <- apply(samples, 1, calculate_par)
+  } else if (type == "paf") {
+    par_samples <- apply(samples, 1, calculate_paf)
+  } else {
+    stop("Invalid type. Please use 'par' or 'paf'")
+  }
 
   # Calculate the confidence interval
   confidence_interval <- quantile(
@@ -172,6 +181,8 @@ calculate_bayesian_ci <- function(
 #' The function samples from the Multinomial distribution to estimate the
 #' posterior distribution.
 #'
+#' @param type String, type of the measure to calculate. Possible values are
+#' "par" and "paf".
 #' @param x A vector containing the values of a, b, c, and d
 #' in this order. Where
 #' a: The count of rows where both exposure and outcome are 1.
@@ -190,10 +201,11 @@ calculate_bayesian_ci <- function(
 #' @examples
 #' # Example usage:
 #' x <- extract_abcd(data, "exposure", "outcome")
-#' calculate_bootstrap_ci(x, 0.99, 5000)
+#' calculate_bootstrap_ci("par", x, 0.99, 5000)
 #'
 #' @export
 calculate_bootstrap_ci <- function(
+  type,
   x,
   interval = 0.95,
   sample_count = 10000
@@ -213,7 +225,13 @@ calculate_bootstrap_ci <- function(
   # Initialize samples dataframe
   samples <- t(rmultinom(sample_count, n, c(p_11, p_10, p_01, p_00)))
 
-  par_samples <- apply(samples, 1, calculate_par)
+  if (type == "par") {
+    par_samples <- apply(samples, 1, calculate_par)
+  } else if (type == "paf") {
+    par_samples <- apply(samples, 1, calculate_paf)
+  } else {
+    stop("Invalid type. Please use 'par' or 'paf'")
+  }
 
   # Calculate the confidence interval
   confidence_interval <- quantile(

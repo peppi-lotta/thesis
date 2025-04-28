@@ -1,0 +1,204 @@
+\chapter{Literature on confidence interval construction of attributable risk}\label{LiteraryReview}
+
+I'm interested in papers that outline, compare or extend on how the population attributable risk should be calculated and how a conffidence interval can be constructed for it. I dont't care about papers that use any method to calculate PAR as a part of there analysis. I have searced for papers in databases like research gate, google scholar and pubmed with attributable AND (risk OR fraction) AND "conffidence interva". I have chosen papers that seem relevant based on title and are free to access.
+
+Drescher and Schill give a simple history timeline on the development of the concept of attributable risk. It was first introduced by Levin in 1953, variance estimate was derived by Walter in 1975. Atributable risk has been generalized to multifactorial and polytomous risk factors by Walter in 1976, Ejigou in 1979, Walker in 1981, Deneman and Schlesselman in 1983 and Wittermore in 1982 and 1983. Alternative astimates that are based on Mantel-Haenszel estimator have been derived by Greenland in 1987 and Kuritz and Landis in 1987 and 1988. Unified approach for calculating attributable risk in general multivariate setting was given by Bruzzi et al. in 1885 and variance estimations were derived by Benichou and Gail in 1990. \cite{Drescher1991AttributableRE} Attributable risk seems to be discussed more often in relation to case-control studies than cross-sectional study settings. \cite{Lui2001NotesOI} The Drescher and Schill paper outlines the history of AR but the paper is not applicaple other wise as it is about case control studies and not cross-sectional.
+
+As many as 16 names have been used to denote population attributable risk, most popular of these include attributable risk, etiologic fraction, attributable risk percentage, fraction of etiology, attributable fraction.\cite{Ahrens2005HandbookOE} Since the orignal introduction of "attributable proportion" there has been an expansion of terminology around this topic. Term include; attributable fraction, attributable risk, attributable risk percent, preventable fraction, prevented fraction, assigned shares, excess fraction, risk fraction, rate fraction, and etiologic fraction. \cite{Greenland2015ConceptsAP}
+
+The term "attributable" has a causal interpretation: PAF is the estimated fraction of all cases that would not have occurred if there had been no exposure. Similarly, we can calculate PAF for the joint effects of two or more exposures. Such a PAF is expected to be less than the sum of the PAF for each exposure because people exposed to both exposures should not be counted twice. As usual, we make the strong assumptions that there is no bias in the study design and data analysis; in particular, that the estimated effect is adjusted for all confounders. In addition, we assume that removing the exposure does not affect other risk factors\cite{mansournia2018population}
+
+
+
+\section{Benefit of understanding Population Attributable risk}
+High risk ration might not indicate a serious health problem if the persons exposed to the risk factor are few. On the other hand if the risk ration is small but a large amount of population is exposed to it it could indicate a serious health impact. Atrributable fraction takes in to acount both the risk relative to those exposed and the number of people who are exposed. \cite{Leung1981ComparisonsOC} The full impact of a risk factor depends both on the size of the risk and proportion of the population exposed to the risk factor. \cite{Drescher1991AttributableRE}  Attributable fraction can be used to estimate the impact of completely removing a risk factor from population. The estimation evaluates how the disease burden could be reduced by controlling the exposure to risk factors. \cite{DiMaso2020AttributableFF} Attributable riks is not a substitute for relative risk and it is an alternative additional dimension to healt hazard appraisal.\cite{Walter1976TheEA}
+
+To prevent disease and injury, one must understand the impact of risk factors on a population's health. Often, one outcome has multiple risk factors, and a risk factor is associated with multiple outcomes. For example, crowded housing and poor nutrition are risk factors for contracting infectious agents, which are the direct cause of disease. 
+Prevention can be done by encouraging healty behaviour. Risk can be targeted with tax, financial incentives, campaigns about heath, engineering and legislation. Risk factors in a population are not immutable. Improved medical care, ageing and public health like vaccination have an affect what are the risk affecting a population. 
+\cite{WHO2009GlobalHealthRisks} I a factor is found rather rarely in a population hence had low attibutable risk health administrators who are conserned with preventativve strategies don't need to focus on such risk factors.\cite{Walter1976TheEA}
+
+When mesuring blood pressure, a person whose bloodpressure is measured to be over 140mmHg is considered hypertensive. A large part of the population is not hypertensive but still have higher than ideal blood pressure. In these types of cases the exposure to a risk factor is not dichotomous or "yes or no"-situation but is more on a scale. It can give incomplete picture if only hypertensive members of the population are considered and a large group members with elevated blood pressure are not taken into account when making population health related decisions.\cite{WHO2009GlobalHealthRisks}
+
+
+PAF assumes that there is a perfect intervention which eradicates the exposure. However, complete removal of an exposure is often unrealistic; even with legal restrictions and cessation programmes, many people will continue to smoke.\cite{mansournia2018population}
+
+\section{Population attributable fraction}\label{PopulationAttributableFraction}
+
+Attributable fraction quatifies the porportion of cases attributable to a risk factor. \cite{DiMaso2020AttributableFF} The number of deaths, disease and injury attributable to risk factor is quatified by applying the population attributable fraction to the total number of outcomes. \cite{WHO2009GlobalHealthRisks}
+
+Atrributable franction was originally formulated for a single dichotomous risk factor basically meaning that the risk factor is eather present or absent. This separation ignores other risk factor that may act together with the risk factor being observed. \cite{DiMaso2020AttributableFF}
+
+\begin{equation} \label{PARequation}
+    PAF = \frac{P(D^+) - P(D^+| E^-)}{P(D^+)}
+\end{equation} \cite{Pirikahu2016BayesianMO}
+
+This formula that Pirikahu et al. have used is representing the PAF with probabilities and was originally proposed by MacManon and Pugh.\cite{DiMaso2020AttributableFF} $P(D^+)$ is the probability of disease in the whole population and $P(D^+| E^-)$ is the eventually hypothesized probability of disease in the unexposed population.\cite{Drescher1991AttributableRE}
+
+\section{Population attributable risk}\label{PopulationAttributableRisk}
+
+Population-attributable risk measures the impact of completely removing a risk factor in a population.
+
+\begin{equation} \label{PARequation}
+PAR = P(D^+) - P(D^+| E^-)
+\end{equation}
+
+where D is the disease status, and E is the exposure status. PAR is a probability distribution calculated by removing the probability distribution of disease cases, given that exposure has not happened from the probability distribution of all disease occurrences. \cite{Pirikahu2016BayesianMO}
+
+\section{Confidence interval construction}\label{FrequentistApproach}
+Variance estimates are needed to construct conffidence intervals. \cite{LehnertBatar2006ComparisonOC}
+
+Walter wrote a paper, “The Estimation and Interpretation of Attributable Risk in Health Research,” in 1976. This paper outlines three study designs and how to estimate the variance of attributable risk in them. This is one of the earliest papers I could find, considering confidence interval construction for attributable risk in cross sectional study setting. The paper considers the simplest situation of dichotomous disease outcome and risk factors that can be represented in a 2x2 contingency table. The paper's third study design is cross-sectional, where N number of unstratified samples are taken from the population, where each sampled individual has the disease or not, and is exposed or not. Walter uses $\lambda$ to denote attributable risk.\cite{Walter1976TheEA}
+
+\begin{equation}
+    \lambda = 1 - \frac{1}{(\pi_{11} + \pi_{12})(\psi - 1) + 1}
+\end{equation}where
+
+\begin{equation}
+    \psi = \frac{\pi_{11}(\pi_{21} + \pi_{22})}{(\pi_{11}+\pi_{12})\pi_{21}} 
+\end{equation}\cite{Walter1976TheEA}
+
+\section{Adjusted Attributable risk}
+The way risk factor work together is not always straight forward and sum of attributable fraction could exeed 100\% if calculated separately. \cite{DiMaso2020AttributableFF} Risk factor can form causal chains where some risk factors a direct causes of disease and others are risk factors of risk factors and indirectly affect the outcome. The sum of risk factors separately is often more than the combined mortality and burden of disease attributable to the group of risk factors. This means reducing any risk factor could lead to prevention of an outcome.\cite{WHO2009GlobalHealthRisks}
+
+Some times the it is impossible or unefficiet to try and get a matched case and control groups. In some cases for example the case group might be older that the control group and the exposure is not independent of this factor. Higher age could mean longer exposure for example as is the case for smoking. One solution to take into account the different ages in the case and control groups is to standardize estimate by calculating a weighted sum where the weight indicate porportion of cases explained by the chosen atrribute\cite{Walter1976TheEA}
+
+\begin{equation}
+    \lambda_s = \sum_{i}\omega_i\lambda_i/\sum_{i}\omega_i
+\end{equation}
+For age groups the weight $\omega_i$ could be chosen to be the count of samples.\cite{Walter1976TheEA} The equation above shows how the weights could be chosen based on sample count in "case-load weighting". DiMaso et al. give a more generally weighted-sum is 
+\begin{equation}
+    _{adj}AF_E=\sum_{k=1}^{K}W_k \times AF_{E,k}
+\end{equation}where sum of weights is equal to 1 $\sum_{k=1}^{K}W_k = 1$. This way the weights could be chosen to increase precission in "precision-weighing". Mantel–Haenszel approach adjusts AF via adjustment of the relative risk.\cite{DiMaso2020AttributableFF} 
+
+It is also possible to decompose attributable risk $\lambda$ into component representing a risk factor and the risk due to confounding with a second confounded factor. A crude estimate with out any regards of confounding is\cite{Walter1976TheEA}
+
+DiMaso et al. introduce modeling approach Bruzzi et al. applied logistic regression models in a way that is valid for cross-sectional studies as well as case-control and cohort studies.Bruzzi's approach is a weighted-sum approach and consists in a weighted sum of relative risks estimates by odds ratios. For each stratum of the adjustment factors, relative risks are combined with the stratum-specific proportion of cases \cite{DiMaso2020AttributableFF} 
+\begin{equation}
+    _{adj}AF_E= 1 - \sum_{k=1}^{K}\sum_{q=0}^{Q}\frac{\rho_{q,k}}{RR_{q|k}}
+\end{equation}\cite{DiMaso2020AttributableFF} First sum is taken over all adjustment strata and second sum is taken over all risk factor levels. $\rho_{q,k}$ is the proportion of cases with respect to the qth risk factor level and kth adjustment stratum, whereas $RR_{q|k}$ represents the relative risk for the qth risk factor level given the kth adjustment stratum. $\rho_{q,k}$ is replaced by the observed proportion of cases and by replacing $RR_{q|k}$ by the maximum-likelihood estimate obtained from a regression model.\cite{DiMaso2020AttributableFF}
+
+DiMaso et al give definitions to sequatial and average attributable fractions. 
+
+
+\begin{equation}
+    \lambda_{crude} = 1 - \frac{cn_2}{dn_1}
+\end{equation} where, $n_1 = a+c$ is the total count of the case group and $n_2 =  b + d $ is the total count of the control group. Estimate of component of attributable riks due to confounding is\cite{Walter1976TheEA}
+
+\begin{equation}
+    \lambda_{conf} = 1 - \frac{cn_2*}{dn_1}
+\end{equation}, where $b* = \sum b_i^*$ and $b_i^* = \frac{a_id_i}{c_i}$
+and atrributable risk adjusted for confounding is\cite{Walter1976TheEA}
+
+\begin{equation}
+    \lambda_{adj} = \lambda_{crude} - \lambda_{conf} = \frac{c(b*-b)}{dn_1}
+\end{equation}\cite{Walter1976TheEA}
+
+\subsection{Confounding}
+Good example case for when calculating for confounding is when estimating the proportion of cases attributable to high blood pressure after adjusting for the effect of smoking which is also known to affect blood pressure.\cite{Walter1976TheEA}
+
+Risk factors are not always dichotomous but could be found on $(k + 1)$ levels. Level 0 is baseline and all other levels are assosiated with incresed risk. Attributable risk at an exposure level i is $\hat{\lambda}_i = \frac{(a_id - b_ic)}{n_1d}$ and the atrributable risk for all levels
+\begin{equation}
+    1 - \hat{\lambda} = 1 - \sum_{i=1}^{k} \hat{\lambda}_i = 1 - \frac{cn_2}{dn_1}
+\end{equation}. Confounding over all exposure levels is same as just calculating exposure as dichotomous.\cite{Walter1976TheEA}
+
+Interaction of risk factor can be tested by comparing combined attributable risk $\lambda$ with the product of attributable risk of factor A and factor B
+\begin{equation}
+    1 - \lambda = (1 - \lambda_{A})(1 - \lambda_{B})
+\end{equation}. If this equation doesn't hold there is synergy or antagonism betweent the risk factors and the equation for confounding should be used.
+\cite{Walter1976TheEA}
+
+Another way to write adjusted attributable risk with confoundinf is
+\begin{equation}
+    AR = 1 - \sum_{j=1}^{k}\frac{P(C=j)P(D=1|E=0,C=j)}{P(D=0)}
+\end{equation} where C is a stratum variable with k gategories. Cell frequesncies are $\hat{p} = (\hat{p}_{11j}, ..., \hat{p}_{22k})$ generated from a multinomial distribution $p = (p_{11j}, ..., p_{22k})$. \cite{LehnertBatar2006ComparisonOC}
+
+\subsection{Logarithmic Transformation}
+Attributable risk can be expressed as
+\begin{equation}
+    AR = \frac{p(r-1)}{1 + p(r-1)}
+\end{equation} where $p$ is the porortion exposed to the risk factor and $r$ is the risk ratio. $AR$ varies between 0 and 1. Maximum likelihood based interval is
+
+\begin{equation}
+    \{\frac{\hat{p}(\hat{r}-1) exp (- u)}{1+\hat{p}(\hat{r}-1) exp (- u)}, \frac{\hat{p}(\hat{r}-1) exp (u)}{1+\hat{p}(\hat{r}-1) exp (u)}\}
+\end{equation}where $u = Z_{1-\frac{1}{2}\alpha}v$ and $Z$ is a standard normal random variable such that $P(Z \leq Z_{1-\frac{1}{2}\alpha}) = 1 - \frac{1}{2}\alpha$. 
+
+Leung and Kupper expand upon Water's work and show that logarithmic transformation (LT) method in conjunction with the monotonicity property leads to a confidence interval with much better properties than those possessed by Walter's ML based interval. Leung and Kupper start by stating a 2x2 contingency table is
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    Exposed & $D^+$ (has disease) & $D^-$ (no disease) \\ \hline
+    $E^+$ & a & b  \\ \hline
+    $E^-$ & c & d\\ \hline
+\end{tabular}
+\end{table} where $N = a + b + c + d$
+
+for cross-sectional study design variance is
+
+\begin{equation}
+    v^2 = \{\frac{(a+c)(c+d)}{ad -bc}\}^2\{\frac{ad(N-c)+bc^2}{Nc(a+c)(c+d)}\}
+\end{equation} and $100(1-a)\%$ confidence interval is 
+\begin{equation}
+    \{\frac{(ad-bc)exp(-u)}{Nc+(ad-bc)exp(-u)}, \frac{(ad-bc)exp(u)}{Nc+(ad-bc)exp(u)}\}
+\end{equation} where $u = Z_{1-\frac{1}{2}\alpha}v$.
+
+If $|\hat{AR} - \frac{1}{2}| \leq \frac{\sqrt{3}}{6}$ the Logarithmic Transformation produces shorter interval than the Maximum likelihood mased approach.\cite{Leung1981ComparisonsOC}
+
+Transformations can improve estimating conffidence intervals when they are based on normal distribution. Logit-transformations seem to produce better results than Log-transformations. Log-tranformed intervals tent to be wider without improvement to coverage. \cite{LehnertBatar2006ComparisonOC}
+
+\subsection{Delta}
+The Delta method is the standard approach to variance estimation for PAR. The bootstrap method outperforms the delta method in terms of coverage and interval length. \cite{Pirikahu2016BayesianMO} Estimates of the adjusted attributable risk is often done by applying the delta method. Delta method generally tends to underestimate the standard error leading to biased conffidence intervals. 
+
+Benichou and Gail first applied the delta method to compute variance estimates for attributable risk in 1989 for case-control studies. Basu and Landis adopted this for multinomial cross-sectional studies in 1995.\cite{LehnertBatar2006ComparisonOC}
+
+Variance based on delta method is 
+\begin{equation}
+    \hat{Var}(\hat{AR}) = D(\hat{p})' \times V(\hat{p}) \times D(\hat{p})
+\end{equation} where $V(\hat{p}) = n^{-1}[diag(\hat{p})-\hat{p}\hat{p}']$ is variance-covariance matrix of $\hat{p}$ with $n$ being the number of observations. $D(\hat{p} = \frac{\partial g(\hat{p})}{\partial \hat{p}_{qlk}})_{q=0,1;l=0,1}$ and $g(\hat{p}) = \hat{AR}$\cite{LehnertBatar2006ComparisonOC}
+
+\subsection{Bootstrap}
+The bootstrap method was first  introduced by Efron in 1979. It gained attencion when computing capacity has grown. The unknown atributable risk is estimated by taking samples with replacement out of underlying data. $\hat{AR}$ is computed every time a sample is taken. This is repeated B times and caculated distrubution of the replications is taken to be the estimated distribution of the true parameter. $\hat{AR}^{*boot} = (\hat{AR}_1^{*boot}, ..., \hat{AR}_B^{*boot})$. \cite{LehnertBatar2006ComparisonOC}
+
+The Bootstrap method approximates the distribution of a statistic by repeated sampling. The samples are drawn from a fitted model or from a dataset with replacement, AKA placing the sample back into the "sample bucket. Drawing from a fitted model is parametric, and drawing from a dataset with replacement is non-parametric.\cite{Pirikahu2016BayesianMO} 
+
+A contingency table has a cell for each classification. A dataset with one exposure and one outcome can be represented in a 2x2 contingency table with four classifications. The probability of selecting a classification is the same as the estimated value in a parametric model. The parametric and non-parametric bootstraps for a 2x2 contingency table are the same when the sample size is the same as the dataset size.\cite{Pirikahu2016BayesianMO} 
+
+To reduce computational burden generating B samples from whole data can be done with weighted method. The choise of the random weight vector is determined by the bootstrap version use. In nonparametric bootstrap for example random variables are taken from multinomial distribution. A variant of nonparametric bootstrap is bayesian bootstrap where random variables are taken from Dirichlet distribution. \cite{LehnertBatar2006ComparisonOC}
+
+\begin{equation}
+    CI_{normal} = [\frac{1}{B}\sum_{b=1}^{B}\hat{AR}_b^{*boot}-Z_{1-\alpha}\times\hat{se}(\hat{AR}^{*boot});\frac{1}{B}\sum_{b=1}^{B}\hat{AR}_b^{*boot}+Z_{1-\alpha}\times\hat{se}(\hat{AR}^{*boot})]
+\end{equation} where $Z_{1-\alpha}$ is the $100\times(1-\alpha)$ precentile of the standard normal distribution and
+\begin{equation}
+    \hat{se}(\hat{AR}^{*boot})=\sqrt{\frac{1}{B-1}\sum_{b=1}^{B}(\hat{AR}_b^{*boot}-\frac{1}{B}\sum_{b=1}^{B}\hat{AR}_b^{*boot})^2}
+\end{equation}
+\cite{LehnertBatar2006ComparisonOC}
+
+\subsection{Jack knife}
+The jackknife as another variant of computer intensive method was suggested by Quenouille in 1949. In this method the data set is changed systematically by leaving out every observation of the data once at a time. The original sample comprises $n$ observations, $n$ replications $\hat{AR}^{*jack} = (\hat{AR}_1^{*jack}, ..., \hat{AR}_n^{*jack})$. \cite{LehnertBatar2006ComparisonOC}
+
+\begin{equation}
+    CI_{normal} = [\frac{1}{n}\sum_{i=1}^{n}\hat{AR}_i^{*jack}-Z_{1-\alpha}\times\hat{se}(\hat{AR}^{*jack});\frac{1}{n}\sum_{i=1}^{n}\hat{AR}_i^{*jack}+Z_{1-\alpha}\times\hat{se}(\hat{AR}^{*jack})]
+\end{equation} where $Z_{1-\alpha}$ is the $100\times(1-\alpha)$ precentile of the standard normal distribution and
+\begin{equation}
+    \hat{se}(\hat{AR}^{*jack})=\sqrt{\frac{n-1}{n}\sum_{i=1}^{n}(\hat{AR}_i^{*jack}-\frac{1}{n}\sum_{i=1}^{n}\hat{AR}_i^{*jack})^2}
+\end{equation}
+\cite{LehnertBatar2006ComparisonOC}
+
+\subsection{Comparison of methods}
+Lui has done a comparison of fve interval estimators of attributable risk; two interval estimators suggested by Leung and Kupper, the interval estimator using the logarithmic
+transformation suggested by Fleiss, the interval estimator on the basis of Wald’s test
+statistic suggested by Walter and the interval estimator using an approach similar as that
+for derivation of Fieller’s theorem. They compare the performances by calculating coverage probability and average legnth of resulting confidence interval. All of these methods seem to produce less than nominal results\cite{Lui2001NotesOI}
+
+Lehnert-Batar et al. tested constructing conffidence intervals with more modern techniques; delta, jack-knife, Bootstarp and Bayesian bootstrap methods with simulated data. The bayesian and non parametric bootstraps seem to perform the best. Jack-knife produces acceptable results. Bootstrap and Jack-knife out perfor delta in almost all situations. When the sample size is small even the computationally expensive Bootstrap and Jack-knife fall short. Delta method outperforms the bootstrap and jackknife in some situations, if the logit-transformation of AR is applied. Bootstrap seems to perform better than Jack-knife in most situations.\cite{LehnertBatar2006ComparisonOC}
+
+Arude attributable fractions are biased because they don't consider adjustment for potential confounders. The adjusted attributable fraction quantifies the effect removing one risk factor from the population has after controlling for other risk factors. Given two dichotomous risk factors $_E1$ and $_E2$ the crude and adjusted attributable fraction will only coincide when $_E1$ and $_E2$ are independently distributed in the population or when $_E2$ alone does not increase disease risk. The weighted-sum approach allows to control both for confounders and effect modifiers, but biased estimates occur when data is sparse. This is because risk factors are not independent and thus multi-exposed cases will be counted more than once. Adjusted attributable fraction should not be used to try partition joint risks into exposure-specific contributions. \cite{DiMaso2020AttributableFF}
+
+Lee et al. compare Green, Delta and Monte Carlo methods to calculating the 95\% interval of the attibutable fraction. Their conclusion is that there is no significant difference between these methods.\cite{Lee2024ACO}
+
+\section{Software}
+Lehnert-Batar et al. used R to compare delta, jack-knife, Bootstarp and Bayesian bootstrap methods. The program is available in ISSAN which is the IMBE Statistical Software Archive Network (http://www.imbe.med.uni-erlangen.de/issan/issan.htm)\cite{LehnertBatar2006ComparisonOC}
+
+There are packages called epiR, AF package, averisk and pifpaf for R that allow calculating versions of attributable fraction that Di Maso et al. outlined. \cite{DiMaso2020AttributableFF}
+
+The AF package is presented in a paper writen by Dahlqwist et al. The paper outlines usage of the pakage via examples done on real openly available data. It provides functions to calculate confounder-adjusted attributable fraction for cross-sectional studies, case–control studies and cohort studies. This package allows for attributable fraction estimation with binary exposures. Dahlqwist et al. name three other R packages for calculating and constructing conffidence interval for attributable fraction. These are epiR, attribrisk and paf but the writers don't consider these up-to-date at the time of writing the paper in 2015.\cite{Dahlqwist2016ModelbasedEO} 

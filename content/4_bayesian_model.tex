@@ -1,6 +1,6 @@
 \chapter{The Bayesian Approach to Confidence Interval Construction for Population Attributable Risk (PAR)} \label{sec:bayesian-model}
 
-In this chapter, I will examine the approach proposed in the paper titled \textit{Bayesian Methods for Confidence Interval Construction of Population Attributable Risk from Cross-Sectional Studies} by \textit{Pirikahu et al. (2016)}
+In this chapter, I will outline the approach proposed in the paper titled \textit{Bayesian Methods for Confidence Interval Construction of Population Attributable Risk from Cross-Sectional Studies} by \textit{Pirikahu et al. (2016)}. I will propose a way to implement the mathematical model into R code, evaluate the model with simulated data and give example workflow for usinf the R package with real life data.
 
 \section{Mathematical Model} \label{PiriMath}
 \begin{table}[ht]
@@ -16,16 +16,15 @@ Total & a $+$ c & b $+$ d & n \\ \hline
 \end{tabular}
 \end{table}
 
-Let $n$ denotes the total sample size, where $a + b + c + d = n$. From the contingency table stucture it is evident that a cross-sectional study incorporating one exposure variable and one disease variable can be characterized as a multinomial distribution with four independent possible outcomes. These outcomes can be described using the multinomial distribution as follows:
+Let $n$ denotes the total sample size, where $a + b + c + d = n$. Probability of exposute is $P(E^+) = \frac{a + b}{n}$, probability of being unexposed is $P(E^-) = \frac{c + d}{n}$ and probability of having the disease regardles of exposure status is $P(D^+) = \frac{a + c}{n}$.
+
+From the contingency table stucture it is evident that a cross-sectional study incorporating one exposure variable and one disease variable can be characterized as a multinomial distribution with four independent possible outcomes. These outcomes can be described using the multinomial distribution as follows
 
 \begin{equation} \label{multinomial}
 (a, b, c, d) \sim Multinomial(n, p_{11}, p_{10}, p_{01}, p_{00})
-\end{equation}
+\end{equation} where,
 
 \begin{itemize}
-    \item $P(E^+) = \frac{a + b}{n}$: The probability of the exposed in a population.
-    \item $P(E^-) = \frac{c + d}{n}$: The probability of the non-exposed in a population.
-    \item $P(D^+) = \frac{a + c}{n}$: The probability of having the disease in a population.
     \item $p_{11} = P(D^+ \cap E^+) = P(D^+ | E^+)P(E^+) = P(E^+ | D^+)P(D^+) = \frac{a}{n}$: The probability of being exposed and having the disease.
     \item $p_{10} = P(D^- \cap E^+) = P(D^- | E^+)P(E^+) = P(E^+ | D^-)P(D^-) = \frac{b}{n}$: The probability of being exposed and not having the disease.
     \item $p_{01} = P(D^+ \cap E^-) = P(D^+ | E^-)P(E^-) = P(E^- | D^+)P(D^+) = \frac{c}{n}$: The probability of not being exposed and having the disease.
@@ -63,7 +62,7 @@ Due to the conjugacy relationship, the posterior can be found analytically in re
     \theta|x ~ Dirichlet(a + 1, b + 1, c + 1, d + 1).
 \end{equation}
 
-Representing posteriors analytically is computationally less expensive than using MCMC simulation. The confidence interval is a Frequentist concept; however, we can determine the Frequentist coverage of the credibility interval through simulated data.
+Representing posteriors analytically is computationally less expensive than using MCMC simulation. The confidence interval is a Frequentist concept; however, we can determine the Frequentist coverage of the credible interval through simulated data.
 
 \section{R Code} \label{CodeImplementation}
 
@@ -142,6 +141,7 @@ Similar to the $calculate_par$ function, the $calculate_bayesian_ci$ method requ
 
 \begin{lstlisting}
 calculate_bayesian_ci <- function(
+    "par",
     x,
     interval = 0.95,
     prior = c(1, 1, 1, 1),
@@ -266,10 +266,9 @@ We can expand this evaluation matrix to compare different sample sizes
 \begin{table}[h!] \label{sample-count-parameters}
     \centering
     \caption{Parameters for the simulation}
-    \label{sample-count-parameters}
-    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|}
     \hline
-    $n$ & 16    & 32    & 64   & 128  & 256  & 512  & 1024 & 4096 & 16384 & 65536 \\ \hline
+    $n$ & 16 & 64 & 256 & 1024 \\ \hline
     \end{tabular}
 \end{table}
 \subsection{Code for Evaluating the Model}
@@ -322,6 +321,7 @@ The confidence interval is computed for each generated contingency table in $sam
       d <- sample[4]
       n <- a + b + c + d
       calculate_bayesian_ci(
+        "par",
         c(a, b, c, d),
         interval,
         prior,
@@ -340,6 +340,7 @@ Bootstrap method is applied to the same set of samples to get a set of confidenc
       d <- sample[4]
       n <- a + b + c + d
       calculate_bayesian_ci(
+        "par",
         c(a, b, c, d),
         interval,
         10000
@@ -400,8 +401,161 @@ Additionally, I utilize the $parallel$ package to execute the multible samples i
     ...
 \end{lstlisting}
 
-\section{Comparison of Pirikahu et al.'s Fully Bayesian method with Bootstrap Method}
+\section{Comparison of Fully Bayesian Method with Bootstrap Method}
 Run the eval code and print some figures here fron the CSV file.
 
 \subsection{Different Priors}
 Run eval code with different priors and print some figures here.
+
+\subsection{Example with Real Data}
+
+\subsection{Data}
+For the purpose of demonstrating the code developed in this thesis, I have utilized the dataset "Risk Factors for Cardiovascular Heart Disease" \cite{dempsy2022risk}, curated by Kuzak Dempsy and made available on Kaggle. This dataset provides a comprehensive collection of health-related variables known to influence cardiovascular disease risk, aligning closely with risk factors identified by the Centers for Disease Control and Prevention.\cite{cdc2023heart}
+The dataset includes the following features:
+\begin{itemize}
+    \item \textbf{Age:} Age of the individual, recorded in days (integer).
+    \item \textbf{Gender:} Gender of the individual (categorical: male or female).
+    \item \textbf{Height:} Height in centimeters (integer).
+    \item \textbf{Weight:} Weight in kilograms (integer).
+    \item \textbf{ap\_hi:} Systolic blood pressure reading (integer).
+    \item \textbf{ap\_lo:} Diastolic blood pressure reading (integer).
+    \item \textbf{Cholesterol:} Cholesterol level, categorized into ordinal groups (integer).
+    \item \textbf{Gluc:} Blood glucose level, categorized into ordinal groups (integer).
+    \item \textbf{Smoke:} Smoking status (boolean).
+    \item \textbf{Alco:} Alcohol consumption status (boolean).
+    \item \textbf{Active:} Physical activity status (boolean).
+    \item \textbf{Cardio:} Presence (1) or absence (0) of cardiovascular disease (boolean, target variable).
+\end{itemize}
+
+\subsection{Code}
+\subsubsection{Imports}
+\begin{lstlisting}
+library(MCMCpack)
+library(dplyr)
+library(compiler)
+library(data.table)
+library(devtools)
+\end{lstlisting}
+
+\begin{lstlisting}
+devtools::install_github("peppi-lotta/par")
+library(par)
+\end{lstlisting}
+
+\subsubsection{Read the data and calculate BMI}
+
+\begin{lstlisting}
+file_path <- "./data.csv"
+data <- read.csv(file_path)
+data <- data[sample(nrow(data), 1000), ]
+data <- data %>%
+    mutate(over_weight = ifelse(weight/((height/100)^2) > 24.99, 1, 0))
+\end{lstlisting}
+
+\subsubsection{Calculate the population attributable risk and confidence interval}
+
+\begin{lstlisting}
+exposure_col <- "over_weight"
+outcome_col <- "cardio"
+
+table <- table(
+    data[[exposure_col]],
+    data[[outcome_col]],
+    dnn = c(
+    exposure_col,
+    outcome_col
+    )
+)
+print(table)
+
+x <- extract_abcd(data, exposure_col, outcome_col)
+print(x)
+
+par <- calculate_par(x)
+cat("PAR: ", par, "\n")
+\end{lstlisting}
+
+\begin{lstlisting}
+interval = 0.95
+prior = c(1, 1, 1, 1)
+sample_count = 10000
+
+bay_ci <- calculate_bayesian_ci(
+    "par",
+    x,
+    interval,
+    prior,
+    sample_count
+)
+cat("Confidence Interval:\n")
+print(bay_ci)
+\end{lstlisting}
+
+\subsubsection{Standardisation}
+
+\begin{lstlisting}
+unique_ages <- unique(data[["age"]])
+unique_ages <- sort(unique_ages)
+print(unique_ages)
+
+data <- data %>%
+    mutate(
+    Age_group = case_when(
+        age/365  < 20 ~ "0-19",
+        age/365 >= 20 & age/365  < 30 ~ "20-29",
+        age/365  >= 30 & age/365  < 40 ~ "30-39",
+        age/365  >= 40 & age/365  < 50 ~ "40-49",
+        age/365  >= 50 & age/365  < 60 ~ "50-59",
+        age/365  >= 60 & age/365  < 70 ~ "50-59",
+        age/365  >= 70 ~ "70+"
+    )
+    )
+print(head(data))
+
+age_groups <- unique(data$Age_group)
+par <- 0
+bay_lower_bound <- 0
+bay_upper_bound <- 0
+boot_lower_bound <- 0
+boot_upper_bound <- 0
+
+for (age_group in age_groups) {
+    exposure_col <- "over_weight"
+    outcome_col <- "cardio"
+    
+    age_data <- data[data$Age_group == age_group, ]
+    weight <- nrow(age_data)
+    
+    x <- extract_abcd(age_data, exposure_col, outcome_col)
+    par <- par + calculate_par(x) * weight
+    
+    bay_ci <- calculate_bayesian_ci(
+    "par",
+    x,
+    interval,
+    prior,
+    sample_count
+    )
+    bay_lower_bound <- bay_lower_bound + bay_ci[1] * weight
+    bay_upper_bound <- bay_upper_bound + bay_ci[2] * weight
+    
+    boot_ci <- calculate_bootstrap_ci(
+    "par",
+    x,
+    interval,
+    sample_count
+    )
+    boot_lower_bound <- boot_lower_bound + boot_ci[1] * weight
+    boot_upper_bound <- boot_upper_bound + boot_ci[2] * weight
+}
+
+cat("par:")
+print(par/nrow(data))
+cat("Confidence Interval:\n")
+cat("Bayes:\n")
+print(c(bay_lower_bound/nrow(data), bay_upper_bound/nrow(data)))
+cat("Bootstrap:\n")
+print(c(boot_lower_bound/nrow(data), boot_upper_bound/nrow(data)))
+\end{lstlisting}
+
+

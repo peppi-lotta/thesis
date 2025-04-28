@@ -63,15 +63,16 @@ get_probabilities_2x2_table <- function( p, q, e ) {
 ```{r}
 # Set the interval and prior values
 interval <- 0.95
-prior <- c(1, 1, 1, 1)
+prior <- c(1, 1, 0.1, 0.1)
 
 # Create a data frame with all combinations of the values
 combinations <- expand.grid(
-  p = c(0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99),
-  q = c(0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99),
-  e = c(0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99),
-  n = c(16, 32, 64, 128, 256, 1024)
+  p = c(0.001, 0.01 , 0.05, 0.1 , 0.2 , 0.3 , 0.35, 0.4 , 0.45 , 0.5),
+  q = c(0.001, 0.01 , 0.05, 0.1 , 0.2 , 0.3 , 0.35, 0.4 , 0.45 , 0.5),
+  e = c(0.01 , 0.1  , 0.2 , 0.3 , 0.4 , 0.5 , 0.6 , 0.7 , 0.8  , 0.9),
+  n = c(16, 64, 256, 1024)
 )
+
 combinations <- as.data.table(combinations)
 total_combinations_count <- nrow(combinations)
 # Initialize columns with NA values
@@ -117,7 +118,7 @@ plan(multisession)
 file_path <- "./combinations.csv"
 data <- read.csv(file_path)
 start <- 1
-end <- 4
+end <- 4000
 
 # Initialize columns with NA values
 data$bayes_ci_mean_length = NA_real_
@@ -141,7 +142,7 @@ results <- future_map(start:end, function(i) {
     c <- sample[3]
     d <- sample[4]
     n <- a + b + c + d
-    calculate_bayesian_ci(c(a, b, c, d), interval, prior, 10000)
+    calculate_bayesian_ci("par", c(a, b, c, d), interval, prior, 2000)
   })
   
   # Calculate metrics for Bayesian CI
@@ -155,7 +156,7 @@ results <- future_map(start:end, function(i) {
     c <- sample[3]
     d <- sample[4]
     n <- a + b + c + d
-    calculate_bootstrap_ci(c(a, b, c, d), interval, 10000)
+    calculate_bootstrap_ci("par", c(a, b, c, d), interval, 2000)
   })
   
   # Calculate metrics for Bootstrap CI
@@ -173,6 +174,8 @@ results <- future_map(start:end, function(i) {
     p_01 = row$p_01,
     p_00 = row$p_00,
     actual_par = row$actual_par,
+    interval = row$interval,
+    prior = row$prior,
     bayes_ci_mean_length = bayes_mean_length,
     bayes_ci_coverage = bayes_coverage,
     boot_ci_mean_length = boot_mean_length,
@@ -188,6 +191,6 @@ end_time <- Sys.time()
 print(paste("Program end time:", end_time))
 
 # Write the final results to a CSV file
-file_name <- paste0("combinations_with_calculations_", start, "_", end, ".csv")
+file_name <- paste0("combinations_with_calculations_prior110101_", start, "_", end, ".csv")
 write.csv(final_results, file_name)
 ```
