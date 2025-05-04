@@ -32,7 +32,7 @@ file_path <- "./data.csv"
 data <- read.csv(file_path)
 
 # Randomly select 250 rows
-# data <- data[sample(nrow(data), 250), ]
+data <- data[sample(nrow(data), 1000), ]
 
 # Calculate BMI and add 1 or 0
 data <- data %>%
@@ -105,13 +105,13 @@ print(unique_ages)
 data <- data %>%
   mutate(
     Age_group = case_when(
-      Age < 20 ~ "0-19",
-      Age >= 20 & Age < 30 ~ "20-29",
-      Age >= 30 & Age < 40 ~ "30-39",
-      Age >= 40 & Age < 50 ~ "40-49",
-      Age >= 50 & Age < 60 ~ "50-59",
-      Age >= 60 & Age < 70 ~ "50-59",
-      Age >= 70 ~ "70+"
+      age/365  < 20 ~ "0-19",
+      age/365 >= 20 & age/365  < 30 ~ "20-29",
+      age/365  >= 30 & age/365  < 40 ~ "30-39",
+      age/365  >= 40 & age/365  < 50 ~ "40-49",
+      age/365  >= 50 & age/365  < 60 ~ "50-59",
+      age/365  >= 60 & age/365  < 70 ~ "50-59",
+      age/365  >= 70 ~ "70+"
     )
   )
 print(head(data))
@@ -128,7 +128,7 @@ boot_upper_bound <- 0
 
 for (age_group in age_groups) {
   exposure_col <- "over_weight"
-  outcome_col <- "reduced_diversity"
+  outcome_col <- "cardio"
   
   # Filter data for the current age group
   age_data <- data[data$Age_group == age_group, ]
@@ -171,4 +171,32 @@ cat("Bayes:\n")
 print(c(bay_lower_bound/nrow(data), bay_upper_bound/nrow(data)))
 cat("Bootstrap:\n")
 print(c(boot_lower_bound/nrow(data), boot_upper_bound/nrow(data)))
+```
+
+```{r}
+print(head(data))
+# Define parameters
+type <- "par"
+exposure_col <- "over_weight"
+outcome_col <- "cardio"
+standarisation_col <- "Age_group"
+interval <- 0.95
+prior <- c(1, 1, 1, 1)
+sample_count <- 1000
+
+# Call the function
+result <- calculate_standardized_bayesian_ci(
+  type = type,
+  data = data,
+  exposure_col = exposure_col,
+  outcome_col = outcome_col,
+  standarisation_col = standarisation_col,
+  interval = interval,
+  prior = prior,
+  sample_count = sample_count
+)
+
+# Print the result
+cat("Standardized Bayesian Confidence Interval:\n")
+print(result)
 ```

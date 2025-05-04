@@ -407,7 +407,7 @@ Run the eval code and print some figures here fron the CSV file.
 \subsection{Different Priors}
 Run eval code with different priors and print some figures here.
 
-\subsection{Example with Real Data}
+\section{Example with Real Data}
 
 \subsection{Data}
 For the purpose of demonstrating the code developed in this thesis, I have utilized the dataset "Risk Factors for Cardiovascular Heart Disease" \cite{dempsy2022risk}, curated by Kuzak Dempsy and made available on Kaggle. This dataset provides a comprehensive collection of health-related variables known to influence cardiovascular disease risk, aligning closely with risk factors identified by the Centers for Disease Control and Prevention.\cite{cdc2023heart}
@@ -510,14 +510,11 @@ data <- data %>%
         age/365  >= 70 ~ "70+"
     )
     )
-print(head(data))
 
 age_groups <- unique(data$Age_group)
 par <- 0
-bay_lower_bound <- 0
-bay_upper_bound <- 0
-boot_lower_bound <- 0
-boot_upper_bound <- 0
+lower_bound <- 0
+upper_bound <- 0
 
 for (age_group in age_groups) {
     exposure_col <- "over_weight"
@@ -536,26 +533,11 @@ for (age_group in age_groups) {
     prior,
     sample_count
     )
-    bay_lower_bound <- bay_lower_bound + bay_ci[1] * weight
-    bay_upper_bound <- bay_upper_bound + bay_ci[2] * weight
-    
-    boot_ci <- calculate_bootstrap_ci(
-    "par",
-    x,
-    interval,
-    sample_count
-    )
-    boot_lower_bound <- boot_lower_bound + boot_ci[1] * weight
-    boot_upper_bound <- boot_upper_bound + boot_ci[2] * weight
 }
-
+    lower_bound <- bay_lower_bound + bay_ci[1] * weight
+    upper_bound <- bay_upper_bound + bay_ci[2] * weight
 cat("par:")
 print(par/nrow(data))
 cat("Confidence Interval:\n")
-cat("Bayes:\n")
-print(c(bay_lower_bound/nrow(data), bay_upper_bound/nrow(data)))
-cat("Bootstrap:\n")
-print(c(boot_lower_bound/nrow(data), boot_upper_bound/nrow(data)))
+print(c(lower_bound/nrow(data), upper_bound/nrow(data)))
 \end{lstlisting}
-
-

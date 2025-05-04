@@ -1,33 +1,38 @@
 \chapter{Introduction} \label{sec:Intro}
 
-The primary focus of this thesis is a paper written by \textit{Pirikahu et al. (2016)} by the title, \textit{Bayesian methods of confidence interval construction for the population attributable risk from cross-sectional studies}. This paper proposes a fully Bayesian approach to constructing a confidence interval for the population-attributable risk (PAR). The PAR value represents the percentage of cases in a population that would not have occurred had the exposure not taken place.\cite{Pirikahu2016BayesianMO}
+The primary focus of this thesis is the paper by Pirikahu et al. (2016) titled "Bayesian methods of confidence interval construction for the population attributable risk from cross-sectional studies" \cite{Pirikahu2016BayesianMO}. The authors propose a fully Bayesian framework for constructing confidence intervals for the population-attributable risk (PAR), a measure that quantifies the percentage of cases in a population that would not have occurred had the exposure not taken place.
 
-Confidence intervals are typically associated with Frequentist statistics. Bayesian approaches do not directly produce confidence intervals but credible intervals. We can create a credible interval with Bayesian approach and use repeated sampling to determine whether the credible interval exhibits the Frequentist properties of a confidence interval. I provide a more in-depth explanation of the differences between confidence and credible intervals in sections \ref{ConfidenceIntervals}, \ref{CredibilityIntervals}, and \ref{BayesianConfidenceIntervals}.
+While confidence intervals are typically associated with the Frequentist statistics.Bayesian methods yield credible intervals—intervals however, by applying repeated sampling, it is possible to examine whether Bayesian credible intervals exhibit the coverage properties expected of Frequentist confidence intervals. A more detailed discussion on the distinction between confidence and credible intervals is provided in Sections \ref{ConfidenceIntervals}, \ref{CredibilityIntervals}, and \ref{BayesianConfidenceIntervals}.
 
-\section{Research question and goal} \label{sec:Task}
+\section{Research Question and Objectives} \label{sec:Task}
 
-As a part of this thesis work, I will create an R package designed to construct a confidence interval for PAR based on the theoretical framework presented in the paper by \textit{Pirikahu et al. (2016)}. 
+The main objective of this thesis is to implement the statistical model proposed by Pirikahu et al. (2016) in the form of an R package. This package will allow users to construct confidence intervals for PAR in a single exposure scenario using a Bayesian approach as well as a bootstap approach.
 
-The paper by \textit{Pirikahu et al. (2016)} provides a complete probability model for constructing a confidence interval in a single exposure scenario. I intend to implement this model within an R package and demonstrate with a workflow and real data how the code can be used. I aim to create an easy-to-use and efficient R package that researchers can utilize. I'm focusing on thorough documentation to minimize user errors. Documentation is created by adhering to the roxygen2 structure.
+The paper provides a complete probabilistic model, which I have implemented as a user-friendly R package. The package is designed with usability and reproducibility in mind, and includes a documented workflow using real-world data. Documentation is developed using the roxygen2 system, which allows code annotations to be compiled into .Rd files without disrupting the code itself \cite{roxygen2}. This thorough documentation aims to ensures clarity and reduces the risk of user error.
 
-Roxygen automatically generates a .Rd file from the comments in the R script without affecting code packageing and use.\cite{roxygen2} I've chosen to use Roxygen because it allowes me to maintain documentation alongside the code.
+To assess the performance and robustness of the model, I have conducted extensive simulation studies using parameter values representative of real-world epidemiological settings, as suggested in the original paper. These simulations involve generating datasets under known conditions and evaluating the performance of the constructed intervals.
 
-I will evaluate the model and its expansions using simulated data. Evaluation happens by selecting specific parameters with known values and simulating data that correspond to these specified values. The \textit{Pirikahu et al. (2016)} paper offers realistic values commonly employed in epidemiology. 
+In addition to the R package, another key deliverable of this thesis is a comprehensive dataset summarizing the simulation results. Both this simulated dataset and R code can be found  in my github account https://github.com/peppi-lotta/par.
 
-In addition to the R package, another concrete outcome of this work is a data table containing evaluation results. Running evaluation with simulations is very resource-intensive. I have created a structure in the evaluation code that allows me to run in subsections and output the results in a CSV file.
+\section{Relevance and Significance}
 
-\section{Relevance}
+PAR and the related measure, population-attributable fraction (PAF), are essential tools in epidemiology. They estimate the potential reduction in disease incidence if a harmful exposure were eliminated. These metrics are critical for policy-makers, healthcare professionals, and other stakeholders when making evidence-based decisions to reduce disease burden at the population level.
 
-\section{Philosophical difference between Frequentist and Bayesian approaches}
+The concept of PAR has been present in the literature since the 1950s and saw significant methodological developments during the late 20th century. Despite the conceptual maturity, there has been inconsistency in terminology, which began to stabilize around the mid-2010s. Although a few R packages currently provide tools to compute PAF, many do not incorporate the latest statistical advancements.
+
+This thesis contributes an up-to-date software tool that allows users to specify whether they wish to calculate PAR or PAF and select the estimation method—Bayesian or bootstrap. This flexibility offers transparency and control, allowing users to understand the assumptions and techniques behind their analyses. My research has yealded evidence for bootstrap methods being the best Freaquentist approach, that why I have chosen to include Bayesian and Bootstrap approaches and enable direct comparison of both methods.
+
+\section{Philosophical Differences Between Frequentist and Bayesian Approaches}
 
 
-\section{Structure of this Thesis} \label{sec:Structure}
+\section{Structure of the Thesis} \label{sec:Structure}
 
-Population-attributable risk describes the potential reduction in disease occurrences if a specific risk factor is eliminated from a population. PAR is a conditional value that can be derived with Bayes' theorem, which provides a mathematical foundation for this thesis work. In the next chapter, chapter \ref{sec: Concepts}, I will begin by discussing Bayes' theorem and its relevance to the \textit{Pirikahu et al. (2016)} paper while providing sufficient context for understanding the underlying theory.
+Chapter \ref{sec: Concepts} introduces the foundational concepts required to understand the paper by Pirikahu et al. (2016). It includes a discussion on Bayes' theorem and its role in computing PAR, as well as an overview of key statistical concepts such as prior and posterior distributions and likelihood. The intended audience is students of the Faculty of Technology with limited background in statistics.
 
-I will outline fundamental statistical terms crucial for later sections of this work. I will also present an overview of Bayesian inference, highlighting key characteristics and concepts such as prior and posterior distributions and likelihood. I assuming the target audience of this thesis are students of Faculty of technology and have limited prior knowledge of statistics.
+Chapter \ref{sec:bayesian-model} presents a detailed description of the Bayesian model introduced in the original paper. It includes mathematical derivations, implementation details, usage instructions for the developed R package, and a discussion of model evaluation using simulated data. Visualizations and tables are provided to illustrate performance metrics and outcomes.
 
-In chapter \ref{sec:bayesian-model}, I will delve into the model described in by \textit{Pirikahu et al. (2016)}, providing a detailed explanation and the necessary mathematical background. This chapter will also include descriptions of the code I created as part of this thesis, instructions on how to use it, and code for evaluating the model with simulated data. I also discuss the results of the evaluation in this chapter and provide figures and tables to illustrate the outcomes.
+Chapter \ref{Conclusion} presents the conclusions drawn from the evaluation results and reflects on the overall success of the R package in terms of usability and functionality. I also discuss the potential future directions for constructing confidence intervals for PAR and PAF.
 
-\section{AI Disclaimer} \label{sec:AI}
-I have utilized ChatGPT versions 3 and 4 to generate ideas for the structure of this thesis. All content has been composed by me from sources I have explicitly cited. While I found the AI helpful for brainstorming, I did not rely on it to generate the content. I have used Grammarly to enhance grammar and structure sentences in my text.
+\section{Use of AI Tools} \label{sec:AI}
+
+In the development of this thesis, I used ChatGPT versions 3 and 4 to support the planning and idea-generation phases, particularly when outlining the structure. All substantive content has been written by me and is based on cited sources. While AI-assisted tools such as Grammarly and ChatGPT were employed for grammar and stylistic improvements, the analytical and technical content is original and verified from sources by me.

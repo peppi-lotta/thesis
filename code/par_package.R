@@ -247,6 +247,164 @@ calculate_bootstrap_ci <- function(
 
 ######################################################################
 ######################################################################
+#' Calculate Standardized Bayesian Confidence Interval
+#'
+#' This function calculates the standardized confidence interval for the 
+#' population attributable risk (PAR) or population attributable fraction (PAF) 
+#' using a fully Bayesian approach. The function accounts for stratification by 
+#' standardization groups.
+#'
+#' @param type String, type of the measure to calculate. Possible values are 
+#' "par" (population attributable risk) and "paf" (population attributable fraction).
+#' @param data Data frame containing the dataset.
+#' @param exposure_col String, name of the exposure column in the dataset.
+#' @param outcome_col String, name of the outcome column in the dataset.
+#' @param standarisation_col String, name of the column used for standardization.
+#' @param interval Numeric, interval for the confidence interval (default is 0.95).
+#' @param prior A list of prior values for the Dirichlet distribution.
+#' (default is c(1, 1, 1, 1))
+#' Possible values are between 0 and 1.
+#' @param sample_count Integer, number of bootstrap samples to draw (default is 10000).
+#'
+#' @return A matrix containing the lower and upper bounds of the standardized 
+#' confidence interval. The first column contains the lower bound, and the 
+#' second column contains the upper bound.
+#'
+#' @examples
+#' # Example usage:
+#' data <- data.frame(
+#'   exposure = c(1, 0, 1, 0, 1, 0),
+#'   outcome = c(1, 0, 1, 1, 0, 0),
+#'   group = c("A", "A", "B", "B", "A", "B")
+#' )
+#' result <- calculate_standardized_bayesian_ci(
+#'   type = "par",
+#'   data = data,
+#'   exposure_col = "exposure",
+#'   outcome_col = "outcome",
+#'   standarisation_col = "group",
+#'   interval = 0.95,
+#'   prior = c(1, 1, 1, 1),
+#'   sample_count = 1000
+#' )
+#' print(result)
+#'
+#' @export
+calculate_standardized_bayesian_ci <- function(
+  type,
+  data,
+  exposure_col,
+  outcome_col,
+  standarisation_col,
+  interval=0.95,
+  prior = c(1, 1, 1, 1),
+  sample_count = 10000
+) {
+  groups <- unique(data[[standarisation_col]])
+  par <- 0
+  lower_bound <- 0
+  upper_bound <- 0
+
+  for (group in groups) {
+    group_data <- data[data[[standarisation_col]] == group, ]
+    weight <- nrow(group_data)
+    
+    x <- extract_abcd(group_data, exposure_col, outcome_col)
+    par <- par + calculate_par(x) * weight
+    
+    bay_ci <- calculate_bayesian_ci(
+      type = type,
+      x = x,
+      interval = interval,
+      prior = prior,
+      sample_count = sample_count
+    )
+    lower_bound <- lower_bound + bay_ci[1] * weight
+    upper_bound <- upper_bound + bay_ci[2] * weight
+  }
+
+  return(matrix(c(lower_bound/nrow(data), upper_bound/nrow(data))))
+}
+
+######################################################################
+######################################################################
+#' Calculate Standardized Bootstrap Confidence Interval
+#'
+#' This function calculates the standardized confidence interval for the 
+#' population attributable risk (PAR) or population attributable fraction (PAF) 
+#' using a bootstrap approach. The function accounts for stratification by 
+#' standardization groups.
+#'
+#' @param type String, type of the measure to calculate. Possible values are 
+#' "par" (population attributable risk) and "paf" (population attributable fraction).
+#' @param data Data frame containing the dataset.
+#' @param exposure_col String, name of the exposure column in the dataset.
+#' @param outcome_col String, name of the outcome column in the dataset.
+#' @param standarisation_col String, name of the column used for standardization.
+#' @param interval Numeric, interval for the confidence interval (default is 0.95).
+#' Possible values are between 0 and 1.
+#' @param sample_count Integer, number of bootstrap samples to draw (default is 10000).
+#'
+#' @return A matrix containing the lower and upper bounds of the standardized 
+#' confidence interval. The first column contains the lower bound, and the 
+#' second column contains the upper bound.
+#'
+#' @examples
+#' # Example usage:
+#' data <- data.frame(
+#'   exposure = c(1, 0, 1, 0, 1, 0),
+#'   outcome = c(1, 0, 1, 1, 0, 0),
+#'   group = c("A", "A", "B", "B", "A", "B")
+#' )
+#' result <- calculate_standardized_bootstrap_ci(
+#'   type = "par",
+#'   data = data,
+#'   exposure_col = "exposure",
+#'   outcome_col = "outcome",
+#'   standarisation_col = "group",
+#'   interval = 0.95,
+#'   sample_count = 1000
+#' )
+#' print(result)
+#'
+#' @export
+calculate_standardized_bootstrap_ci <- function(
+  type,
+  data,
+  exposure_col,
+  outcome_col,
+  standarisation_col,
+  interval,
+  sample_count
+) {
+  groups <- unique(data[[standarisation_col]])
+  par <- 0
+  lower_bound <- 0
+  upper_bound <- 0
+
+  for (group in groups) {
+    group_data <- data[data[[standarisation_col]] == group, ]
+    weight <- nrow(group_data)
+    
+    x <- extract_abcd(group_data, exposure_col, outcome_col)
+    par <- par + calculate_par(x) * weight
+    
+    bay_ci <- calculate_bootstrap_ci(
+    type,
+    x,
+    interval,
+    prior,
+    sample_count
+    )
+    lower_bound <- lower_bound + bay_ci[1] * weight
+    upper_bound <- upper_bound + bay_ci[2] * weight
+  }
+
+  return(matrix(c(lower_bound/nrow(data), upper_bound/nrow(data))))
+}
+
+######################################################################
+######################################################################
 #' Compile all functions
 #' This function compiles all functions in the package. This is useful for
 #' optimizing the performance of the functions.

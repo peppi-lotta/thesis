@@ -63,7 +63,7 @@ get_probabilities_2x2_table <- function( p, q, e ) {
 ```{r}
 # Set the interval and prior values
 interval <- 0.95
-prior <- c(1, 1, 0.1, 0.1)
+prior <- c(0.1, 0.1, 1, 1)
 
 # Create a data frame with all combinations of the values
 combinations <- expand.grid(
@@ -191,6 +191,6 @@ end_time <- Sys.time()
 print(paste("Program end time:", end_time))
 
 # Write the final results to a CSV file
-file_name <- paste0("combinations_with_calculations_prior110101_", start, "_", end, ".csv")
+file_name <- paste0("data_prior_010111.csv")
 write.csv(final_results, file_name)
 ```
